@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Used by the window background (avoids a white flash on launch) and the launcher icon. -->
+    <color name="hayati_background">#FF090F2B</color>
+    <color name="hayati_gold">#FFE6B64A</color>
+</resources>
