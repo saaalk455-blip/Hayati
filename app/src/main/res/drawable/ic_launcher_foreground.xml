@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Original gold crescent, kept inside the 66dp adaptive-icon safe zone. -->
+    <group
+        android:translateX="2.5">
+        <path
+            android:fillColor="#E6B64A"
+            android:pathData="M51.75,32 A22,22 0 1 0 73.05,60.4 A18,18 0 1 1 51.75,32 Z" />
+    </group>
+</vector>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">حياتي</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_worship">العبادة</string>
+    <string name="nav_tasks">المهام</string>
+    <string name="nav_statistics">الإحصائيات</string>
+    <string name="back">رجوع</string>
+
+    <!-- Home -->
+    <string name="home_greeting">السلام عليكم</string>
+    <string name="home_subtitle">أهلًا بك في حياتي، رفيقك لتنظيم يومك وعبادتك</string>
+    <string name="home_settings">الإعدادات</string>
+    <string name="welcome_title">حياتي</string>
+    <string name="welcome_message">اجعل كل يوم خطوة هادئة نحو حياة أكثر سكينة وانتظامًا.</string>
+    <string name="today_title">نظرة على يومك</string>
+    <string name="overview_next_prayer">الصلاة القادمة</string>
+    <string name="overview_time_remaining">الوقت المتبقي للصلاة</string>
+    <string name="overview_quran_wird">الورد القرآني اليومي</string>
+    <string name="overview_adhkar">أذكار اليوم</string>
+    <string name="overview_tasks">المهام اليومية</string>
+    <string name="unavailable_badge">غير متاح بعد</string>
+    <string name="quick_actions_title">اختصارات سريعة</string>
+
+    <!-- Worship sections -->
+    <string name="worship_title">العبادة</string>
+    <string name="worship_subtitle">اختر القسم الذي تريد البدء به</string>
+    <string name="section_prayer">الصلاة</string>
+    <string name="section_quran">القرآن الكريم</string>
+    <string name="section_adhkar">الأذكار</string>
+    <string name="section_tasbeeh">التسبيح</string>
+    <string name="section_prayer_desc">مواقيت الصلاة ومتابعتها</string>
+    <string name="section_quran_desc">ورد القراءة اليومي</string>
+    <string name="section_adhkar_desc">أذكار الصباح والمساء وغيرها</string>
+    <string name="section_tasbeeh_desc">عدّاد تسبيح بسيط</string>
+    <string name="coming_soon_title">هذا القسم قادم قريبًا</string>
+    <string name="coming_soon_body">نعمل على تجهيز هذا القسم ليكون جزءًا من إصدار قادم. لا توجد بيانات لعرضها الآن.</string>
+
+    <!-- Tasks -->
+    <string name="tasks_title">المهام</string>
+    <string name="tasks_subtitle">نظّم مهامك اليومية في مكان واحد</string>
+    <string name="tasks_empty_title">لا توجد مهام بعد</string>
+    <string name="tasks_empty_body">هنا ستنظّم مهامك اليومية وتتابع إنجازك. ستتمكن من إضافة المهام في إصدار قادم.</string>
+
+    <!-- Statistics -->
+    <string name="stats_title">الإحصائيات</string>
+    <string name="stats_subtitle">تابع تقدّمك مع مرور الأيام</string>
+    <string name="stats_empty_title">لا توجد إحصائيات بعد</string>
+    <string name="stats_empty_body">ستظهر إحصائياتك الحقيقية هنا بعد أن تبدأ باستخدام التطبيق.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_appearance_title">المظهر</string>
+    <string name="settings_appearance_body">المظهر الداكن هو المظهر المعتمد حاليًا. خيارات مظهر إضافية ستتوفر في إصدار قادم.</string>
+    <string name="settings_language_title">اللغة والاتجاه</string>
+    <string name="settings_language_body">العربية، مع اتجاه الواجهة من اليمين إلى اليسار.</string>
+    <string name="settings_about_title">عن التطبيق</string>
+    <string name="settings_version_label">الإصدار</string>
+    <string name="settings_privacy_note">يعمل التطبيق دون حساب ودون اتصال بالإنترنت.</string>
+</resources>
