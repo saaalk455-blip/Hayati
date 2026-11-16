@@ -135,6 +135,12 @@ Reports must be factual. Never call a feature complete when only its UI exists. 
 
 ## 10. Current phase
 
-Setup only. Documentation, build-environment inspection and repository verification are done on
-`docs/project-protocol-setup`. **Do not implement application features until the next feature
-specification is approved.** See `docs/PROJECT_STATUS.md` for the actual state.
+Phase 2 (Android foundation) is implemented on `feature/android-foundation` and awaits owner
+device testing and PR review. The app shell, theme, navigation and placeholder screens exist; no
+real feature (prayer times, Quran, adhkar, tasks, statistics data) is implemented.
+**Do not start the next phase or implement features until a specification is approved.**
+See `docs/PROJECT_STATUS.md` for the actual state.
+
+Build facts: this authoring environment has no Android SDK and no Maven access, so builds and
+unit tests run in GitHub Actions (`.github/workflows/android-build.yml`); check the CI run result
+instead of claiming a local build.
