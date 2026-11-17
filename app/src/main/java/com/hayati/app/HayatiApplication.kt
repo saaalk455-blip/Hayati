@@ -4,4 +4,9 @@ import android.app.Application
 
 class HayatiApplication : Application() {
     val container: AppContainer by lazy { AppContainer(this) }
+
+    override fun onCreate() {
+        super.onCreate()
+        container.startPrayerAutomation()
+    }
 }

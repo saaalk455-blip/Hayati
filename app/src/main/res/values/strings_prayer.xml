@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Prayer names -->
+    <string name="prayer_fajr">الفجر</string>
+    <string name="prayer_sunrise">الشروق</string>
+    <string name="prayer_dhuhr">الظهر</string>
+    <string name="prayer_asr">العصر</string>
+    <string name="prayer_maghrib">المغرب</string>
+    <string name="prayer_isha">العشاء</string>
+
+    <!-- Calculation methods (each is implemented by the adhan2 engine) -->
+    <string name="method_mwl">رابطة العالم الإسلامي</string>
+    <string name="method_egyptian">الهيئة المصرية العامة للمساحة</string>
+    <string name="method_umm_al_qura">أم القرى (مكة المكرمة)</string>
+    <string name="method_isna">الجمعية الإسلامية لأمريكا الشمالية</string>
+    <string name="method_karachi">جامعة العلوم الإسلامية بكراتشي</string>
+    <string name="method_dubai">دبي</string>
+    <string name="method_qatar">قطر</string>
+    <string name="method_kuwait">الكويت</string>
+    <string name="method_turkey">رئاسة الشؤون الدينية التركية</string>
+    <string name="method_singapore">سنغافورة</string>
+    <string name="asr_standard">قياسي (الشافعي والمالكي والحنبلي)</string>
+    <string name="asr_hanafi">حنفي</string>
+
+    <string name="time_am">ص</string>
+    <string name="time_pm">م</string>
+
+    <!-- Notification channels and content -->
+    <string name="channel_prayer_sound">تنبيهات الصلاة (بصوت)</string>
+    <string name="channel_prayer_sound_desc">تنبيه وقت الصلاة بصوت الإشعارات</string>
+    <string name="channel_prayer_silent">تنبيهات الصلاة (صامتة)</string>
+    <string name="channel_prayer_silent_desc">تنبيه وقت الصلاة دون صوت</string>
+    <string name="notif_now_title">حان الآن وقت صلاة %1$s</string>
+    <string name="notif_now_body">حيّ على الصلاة، واجعل صلاتك في وقتها.</string>
+    <string name="notif_reminder_title">تبقّى %1$d دقيقة على صلاة %2$s</string>
+    <string name="notif_reminder_body">موعد الصلاة %1$s. استعدّ لها.</string>
+    <string name="notif_late_title">صلاة %1$s كان وقتها %2$s</string>
+    <string name="notif_late_body">وصل هذا التنبيه متأخرًا، فتأكد من وقت الصلاة في التطبيق.</string>
+</resources>

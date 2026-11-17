@@ -201,3 +201,26 @@ class FakePrayerTimeCalculator(
         )
     }
 }
+
+class FakeAlarmScheduler : com.hayati.app.domain.prayer.repository.PrayerAlarmScheduler {
+    val alarms = linkedMapOf<Int, com.hayati.app.domain.prayer.model.PlannedAlert>()
+    var exactAllowed = true
+    var scheduleCalls = 0
+        private set
+
+    override fun canScheduleExact() = exactAllowed
+
+    override fun schedule(alert: com.hayati.app.domain.prayer.model.PlannedAlert) {
+        scheduleCalls++
+        alarms[alert.requestCode] = alert
+    }
+
+    override fun cancel(requestCode: Int) {
+        alarms.remove(requestCode)
+    }
+}
+
+class FakeNotificationPermission(var allowed: Boolean = true) :
+    com.hayati.app.domain.prayer.repository.NotificationPermissionChecker {
+    override fun areNotificationsAllowed() = allowed
+}

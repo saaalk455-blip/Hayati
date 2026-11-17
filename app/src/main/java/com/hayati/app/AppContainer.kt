@@ -5,6 +5,10 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.hayati.app.core.common.SystemTimeProvider
 import com.hayati.app.core.common.TimeProvider
+import com.hayati.app.core.notifications.AlarmManagerPrayerScheduler
+import com.hayati.app.core.notifications.PrayerAutomation
+import com.hayati.app.core.notifications.PrayerNotificationCoordinator
+import com.hayati.app.core.notifications.PrayerNotificationPresenter
 import com.hayati.app.data.local.HayatiDatabase
 import com.hayati.app.data.prayer.calculator.AdhanPrayerTimeCalculator
 import com.hayati.app.data.prayer.location.AndroidLocationProvider
@@ -13,6 +17,7 @@ import com.hayati.app.data.prayer.repository.DataStorePrayerSettingsRepository
 import com.hayati.app.data.prayer.repository.PrayerLogRepositoryImpl
 import com.hayati.app.data.repository.TaskRepositoryImpl
 import com.hayati.app.domain.prayer.model.CalculationMethod
+import com.hayati.app.domain.prayer.repository.PrayerAlarmScheduler
 import com.hayati.app.domain.prayer.repository.PrayerLogRepository
 import com.hayati.app.domain.prayer.repository.PrayerSettingsRepository
 import com.hayati.app.domain.prayer.repository.PrayerTimeCalculator
@@ -68,5 +73,25 @@ class AppContainer(context: Context) {
 
     val prayerSnapshotProvider: PrayerSnapshotProvider by lazy {
         PrayerSnapshotProvider(prayerSettingsRepository, prayerLogRepository, prayerTimeCalculator)
+    }
+
+    val alarmScheduler: PrayerAlarmScheduler by lazy { AlarmManagerPrayerScheduler(appContext) }
+
+    val notificationPresenter: PrayerNotificationPresenter by lazy { PrayerNotificationPresenter(appContext) }
+
+    val notificationCoordinator: PrayerNotificationCoordinator by lazy {
+        PrayerNotificationCoordinator(
+            settingsRepository = prayerSettingsRepository,
+            calculator = prayerTimeCalculator,
+            scheduler = alarmScheduler,
+            permission = notificationPresenter,
+            time = timeProvider,
+        )
+    }
+
+    /** Starts the settings-driven re-scheduling. Called once from [HayatiApplication.onCreate]. */
+    fun startPrayerAutomation() {
+        notificationPresenter.ensureChannels()
+        PrayerAutomation(appContext, prayerSettingsRepository, notificationCoordinator, applicationScope).start()
     }
 }
