@@ -63,3 +63,40 @@
 - Decision: values without a real data source are modeled as `OverviewValue.Unavailable` and shown
   as "غير متاح بعد". No fake prayer times, Quran progress, statistics or tasks.
 - Settings contains no toggles, because nothing is persisted yet.
+
+## D-010 — Manual dependency injection instead of Hilt (2026-11-17, Phase 3)
+
+- Decision: constructor injection through a small `AppContainer` created by `HayatiApplication`,
+  with one `AppViewModelProvider` factory. No Hilt.
+- Why: the object graph is tiny (database, one repository, a time provider, two ViewModels). Hilt
+  would add a second annotation processor and build-time risk for no present benefit, and every
+  class already takes its dependencies through its constructor, so migrating later is mechanical.
+- Revisit: when the graph grows (several repositories, workers, notifications) or when
+  instrumented tests need to replace bindings.
+
+## D-011 — Tasks are scoped to a calendar day (2026-11-17, Phase 3)
+
+- Decision: a task stores `epochDay` (device time zone) and the Tasks screen and Home counter show
+  only today's tasks. Day changes are picked up when the screen starts (`refreshDay`).
+- Why: the product text calls them "المهام اليومية"; per-day storage also gives the future
+  Statistics feature real per-day data (creation and completion times are stored).
+- Consequence: unfinished tasks are not carried over automatically (KI-011).
+
+## D-012 — Room with KSP; Kotlin 2.1.21 (2026-11-17, Phase 3)
+
+- Decision: Room 2.7.1 with the KSP plugin `2.1.21-2.0.2`; Kotlin moved from 2.1.20 to 2.1.21
+  because KSP versions are tied to a Kotlin version and a `2.1.21` KSP release was the one confirmed
+  to exist. Schema export is off for version 1 (KI-010).
+- Note: newer Room/Kotlin releases exist; upgrading is a separate task.
+
+## D-013 — Database tests on the JVM with Robolectric (2026-11-17, Phase 3)
+
+- Decision: the DAO is tested against real Room/SQLite with Robolectric (SDK 34) in the normal
+  `testDebugUnitTest` run; repository and ViewModels are tested with in-memory fakes.
+- Why: CI has no emulator, so instrumented tests cannot run there. Trade-off: not real-device SQLite (KI-013).
+
+## D-014 — Validation rules for tasks (2026-11-17, Phase 3)
+
+- Decision: titles are trimmed, must not be blank, and are capped at 120 characters. Validation
+  lives in `TaskTitle` (domain), used by the ViewModel for UI feedback and by the repository as a guard.
+- Deleting a task asks for confirmation; storage failures show a dismissible message, not a crash.

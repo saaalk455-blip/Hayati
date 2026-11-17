@@ -1,19 +1,20 @@
 # Hayati — حياتي
 
-تطبيق أندرويد عربي (RTL) لتنظيم اليوم والعبادة. **المرحلة الحالية: الأساس (Phase 2)** — الواجهة والتنقل جاهزان، أما الميزات الفعلية (مواقيت الصلاة، القرآن، الأذكار، المهام…) فلم تُنفَّذ بعد.
+تطبيق أندرويد عربي (RTL) لتنظيم اليوم والعبادة. **المرحلة الحالية: المهام اليومية (Phase 3)** — المهام تُحفظ في قاعدة بيانات على الجهاز وتظهر في الرئيسية. بقية الميزات (مواقيت الصلاة، القرآن، الأذكار…) لم تُنفَّذ بعد.
 
 Hayati is an Arabic-first, RTL Android app for organizing daily life and worship.
-**Current phase: Phase 2 (foundation).** The app shell, design system and navigation exist;
-real features (prayer times, Quran, adhkar, tasks, …) are not implemented yet.
+**Current phase: Phase 3 (persistent daily tasks).** Tasks are stored in a Room database and the
+Home counter is real. Other features (prayer times, Quran, adhkar, …) are not implemented yet.
 
-- Package: `com.hayati.app` · Version: `0.2.0` · minSdk 26 · target/compileSdk 36
+- Package: `com.hayati.app` · Version: `0.3.0` · minSdk 26 · target/compileSdk 36
 - No account, no internet permission, no analytics/ads/Firebase.
 
 ## What works today
 
 - Premium dark Arabic RTL theme (approved palette), Material 3.
 - Bottom navigation: الرئيسية، العبادة، المهام، الإحصائيات.
-- Home dashboard, Worship hub, Tasks and Statistics empty states, Settings (read-only), and
+- **Daily tasks (persistent):** add, edit, complete and delete tasks; they are kept after closing the app. Home shows the real tasks progress. (Verified by unit/database tests in CI; not yet tested on a device.)
+- Home dashboard, Worship hub, Statistics empty state, Settings (read-only), and
   "coming soon" placeholders for Prayer / Quran / Adhkar / Tasbeeh.
 - Values that have no real data source are shown as **"غير متاح بعد"** — nothing is invented.
 
