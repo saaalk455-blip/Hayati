@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
+import kotlin.time.ExperimentalTime
 
 /**
  * Prayer times from the open-source adhan2 library (MIT, com.batoulapps.adhan:adhan2). This is
@@ -27,6 +28,7 @@ import java.time.LocalDate
  * Manual minute adjustments are applied here, once, on the returned instants. The library's own
  * adjustment feature is left at zero so an adjustment can never be applied twice.
  */
+@OptIn(ExperimentalTime::class) // adhan2 exposes kotlin.time.Instant, which is still experimental
 class AdhanPrayerTimeCalculator(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PrayerTimeCalculator {
