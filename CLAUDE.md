@@ -135,9 +135,10 @@ Reports must be factual. Never call a feature complete when only its UI exists. 
 
 ## 10. Current phase
 
-Phase 2 (Android foundation) is implemented on `feature/android-foundation` and awaits owner
-device testing and PR review. The app shell, theme, navigation and placeholder screens exist; no
-real feature (prayer times, Quran, adhkar, tasks, statistics data) is implemented.
+Phase 2 (foundation, PR #2) was owner-tested and is awaiting merge. Phase 3 (persistent daily
+tasks with Room, version 0.3.0) is implemented on `feature/tasks-persistence` (stacked on PR #2),
+passes CI, and awaits owner device testing and review. Prayer times, Quran, adhkar and statistics
+data are not implemented.
 **Do not start the next phase or implement features until a specification is approved.**
 See `docs/PROJECT_STATUS.md` for the actual state.
 
