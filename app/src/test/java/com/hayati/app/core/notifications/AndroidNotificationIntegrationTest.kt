@@ -19,6 +19,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowAlarmManager
 
 /**
  * Robolectric tests of the Android glue (AlarmManager, receivers, notifications). They run on the
@@ -40,6 +41,7 @@ class AndroidNotificationIntegrationTest {
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        ShadowAlarmManager.setCanScheduleExactAlarms(true)
         shadowOf(alarmManager).scheduledAlarms.clear()
     }
 
@@ -65,7 +67,7 @@ class AndroidNotificationIntegrationTest {
 
     @Test
     fun `when the exact alarm permission is revoked the scheduler still schedules and reports it`() {
-        shadowOf(alarmManager).setCanScheduleExactAlarms(false)
+        ShadowAlarmManager.setCanScheduleExactAlarms(false)
         val scheduler = AlarmManagerPrayerScheduler(context)
         assertEquals(false, scheduler.canScheduleExact())
         scheduler.schedule(alert(1))
