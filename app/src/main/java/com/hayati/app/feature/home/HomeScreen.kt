@@ -30,8 +30,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hayati.app.AppViewModelProvider
 import com.hayati.app.R
 import com.hayati.app.core.designsystem.components.CrescentDecoration
 import com.hayati.app.core.designsystem.components.HayatiCard
@@ -53,9 +56,10 @@ fun HomeScreen(
     onOpenSection: (WorshipSection) -> Unit,
     onOpenTasks: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(),
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    LifecycleEventEffect(Lifecycle.Event.ON_START) { viewModel.refreshDay() }
 
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -198,12 +202,30 @@ private fun OverviewRow(entry: OverviewEntry) {
         )
         when (val value = entry.value) {
             OverviewValue.Unavailable -> UnavailableBadge()
-            is OverviewValue.Available -> Text(
-                text = value.text,
-                style = MaterialTheme.typography.titleSmall,
-                color = LocalHayatiColors.current.success,
-            )
+            is OverviewValue.TasksProgress -> TasksProgressText(value)
         }
+    }
+}
+
+@Composable
+private fun TasksProgressText(progress: OverviewValue.TasksProgress) {
+    val colors = LocalHayatiColors.current
+    if (progress.total == 0) {
+        Text(
+            text = stringResource(R.string.overview_tasks_none),
+            style = MaterialTheme.typography.bodyMedium,
+            color = colors.textSecondary,
+        )
+    } else {
+        Text(
+            text = stringResource(
+                R.string.overview_tasks_progress,
+                progress.completed,
+                progress.total,
+            ),
+            style = MaterialTheme.typography.titleSmall,
+            color = if (progress.completed == progress.total) colors.success else colors.gold,
+        )
     }
 }
 
