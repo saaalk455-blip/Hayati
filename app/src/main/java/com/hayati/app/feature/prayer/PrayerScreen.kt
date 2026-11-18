@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
@@ -357,16 +359,25 @@ private fun PrayerRowItem(
             color = if (row.event == PrayerEvent.SUNRISE) colors.textSecondary else MaterialTheme.colorScheme.onSurface,
         )
         if (prayer != null) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = 8.dp)) {
-                Checkbox(
-                    checked = row.completed == true,
-                    onCheckedChange = { onToggle(prayer, it) },
-                    enabled = started || row.completed == true,
-                )
+            val done = row.completed == true
+            val enabled = started || done
+            // The whole control (box and its label) is one tap target.
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .toggleable(
+                        value = done,
+                        enabled = enabled,
+                        role = Role.Checkbox,
+                        onValueChange = { onToggle(prayer, it) },
+                    ),
+            ) {
+                Checkbox(checked = done, onCheckedChange = null, enabled = enabled)
                 Text(
                     text = stringResource(
                         when {
-                            row.completed == true -> R.string.prayer_undo
+                            done -> R.string.prayer_undo
                             started -> R.string.prayer_mark_done
                             else -> R.string.prayer_not_yet
                         },
