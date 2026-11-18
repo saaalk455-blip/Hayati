@@ -9,6 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hayati.app.feature.home.HomeScreen
+import com.hayati.app.feature.prayer.PrayerHistoryScreen
+import com.hayati.app.feature.prayer.PrayerScreen
+import com.hayati.app.feature.prayer.PrayerSettingsScreen
 import com.hayati.app.feature.settings.SettingsScreen
 import com.hayati.app.feature.statistics.StatisticsScreen
 import com.hayati.app.feature.tasks.TasksScreen
@@ -37,6 +40,7 @@ fun HayatiNavHost(
                 onOpenSettings = { navController.navigateSingleTop(HayatiRoutes.SETTINGS) },
                 onOpenSection = { navController.navigateSingleTop(it.route) },
                 onOpenTasks = { navController.navigateTopLevel(TopLevelDestination.Tasks) },
+                onOpenPrayer = { navController.navigateSingleTop(WorshipSection.Prayer.route) },
             )
         }
         composable(HayatiRoutes.WORSHIP) {
@@ -45,9 +49,26 @@ fun HayatiNavHost(
         composable(HayatiRoutes.TASKS) { TasksScreen() }
         composable(HayatiRoutes.STATISTICS) { StatisticsScreen() }
         composable(HayatiRoutes.SETTINGS) {
-            SettingsScreen(onBack = { navController.popBackStack() })
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onOpenPrayerSettings = { navController.navigateSingleTop(HayatiRoutes.PRAYER_SETTINGS) },
+            )
         }
-        WorshipSection.entries.forEach { section ->
+        composable(WorshipSection.Prayer.route) {
+            PrayerScreen(
+                onBack = { navController.popBackStack() },
+                onOpenSettings = { navController.navigateSingleTop(HayatiRoutes.PRAYER_SETTINGS) },
+                onOpenHistory = { navController.navigateSingleTop(HayatiRoutes.PRAYER_HISTORY) },
+            )
+        }
+        composable(HayatiRoutes.PRAYER_SETTINGS) {
+            PrayerSettingsScreen(onBack = { navController.popBackStack() })
+        }
+        composable(HayatiRoutes.PRAYER_HISTORY) {
+            PrayerHistoryScreen(onBack = { navController.popBackStack() })
+        }
+        // Prayer is a real screen above; the other sections are still honest placeholders.
+        WorshipSection.entries.filter { it != WorshipSection.Prayer }.forEach { section ->
             composable(section.route) {
                 WorshipSectionPlaceholderScreen(
                     section = section,

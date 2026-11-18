@@ -1,9 +1,10 @@
 package com.hayati.app.domain.model
 
-/** Items shown in the Home "today" overview. */
+/**
+ * Items shown in the Home "today" overview. Prayer information is shown by its own Home card
+ * (from the shared prayer snapshot), not as overview rows.
+ */
 enum class OverviewItem {
-    NextPrayer,
-    TimeRemaining,
     QuranWird,
     Adhkar,
     Tasks,

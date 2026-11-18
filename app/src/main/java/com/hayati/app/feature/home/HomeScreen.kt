@@ -47,6 +47,10 @@ import com.hayati.app.core.designsystem.theme.LocalHayatiColors
 import com.hayati.app.domain.model.OverviewEntry
 import com.hayati.app.domain.model.OverviewItem
 import com.hayati.app.domain.model.OverviewValue
+import com.hayati.app.core.common.TimeFormatter
+import com.hayati.app.core.common.labelRes
+import com.hayati.app.domain.prayer.model.PrayerSnapshot
+import com.hayati.app.feature.prayer.locationTitle
 import com.hayati.app.feature.worship.WorshipSection
 import com.hayati.app.feature.worship.icon
 
@@ -55,6 +59,7 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
     onOpenSection: (WorshipSection) -> Unit,
     onOpenTasks: () -> Unit,
+    onOpenPrayer: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -71,6 +76,7 @@ fun HomeScreen(
     ) {
         item(key = "header") { HomeHeader(onOpenSettings = onOpenSettings) }
         item(key = "welcome") { WelcomeCard() }
+        item(key = "prayer") { PrayerHomeCard(snapshot = state.prayer, onClick = onOpenPrayer) }
         item(key = "today_title") { SectionTitle(stringResource(R.string.today_title)) }
         item(key = "overview") { OverviewCard(entries = state.overview) }
         item(key = "quick_title") { SectionTitle(stringResource(R.string.quick_actions_title)) }
@@ -229,10 +235,66 @@ private fun TasksProgressText(progress: OverviewValue.TasksProgress) {
     }
 }
 
+@Composable
+private fun PrayerHomeCard(snapshot: PrayerSnapshot, onClick: () -> Unit) {
+    val colors = LocalHayatiColors.current
+    HayatiCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
+        when (snapshot) {
+            PrayerSnapshot.Loading -> Text(
+                text = stringResource(R.string.prayer_loading),
+                style = MaterialTheme.typography.bodyMedium,
+                color = colors.textSecondary,
+            )
+            PrayerSnapshot.NotConfigured -> Text(
+                text = stringResource(R.string.home_prayer_setup),
+                style = MaterialTheme.typography.titleSmall,
+                color = colors.gold,
+            )
+            is PrayerSnapshot.Error -> Text(
+                text = stringResource(R.string.home_prayer_unavailable),
+                style = MaterialTheme.typography.bodyMedium,
+                color = colors.textSecondary,
+            )
+            is PrayerSnapshot.Ready -> {
+                val next = snapshot.next
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.overview_next_prayer),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colors.textSecondary,
+                        )
+                        if (next != null) {
+                            Text(
+                                text = stringResource(next.prayer.labelRes()) + " · " + TimeFormatter.clock(
+                                    next.time, snapshot.zone, snapshot.use24Hour,
+                                    stringResource(R.string.time_am), stringResource(R.string.time_pm),
+                                ),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = colors.gold,
+                            )
+                        }
+                    }
+                    Text(
+                        text = stringResource(R.string.prayer_remaining, TimeFormatter.countdown(snapshot.remainingMillis ?: 0L)),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+                Text(
+                    text = locationTitle(snapshot.location) + " · " +
+                        stringResource(R.string.home_prayer_summary, snapshot.summary.completed),
+                    modifier = Modifier.padding(top = 8.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colors.textSecondary,
+                )
+            }
+        }
+    }
+}
+
 @StringRes
 private fun OverviewItem.labelRes(): Int = when (this) {
-    OverviewItem.NextPrayer -> R.string.overview_next_prayer
-    OverviewItem.TimeRemaining -> R.string.overview_time_remaining
     OverviewItem.QuranWird -> R.string.overview_quran_wird
     OverviewItem.Adhkar -> R.string.overview_adhkar
     OverviewItem.Tasks -> R.string.overview_tasks

@@ -36,4 +36,113 @@
     <string name="notif_reminder_body">موعد الصلاة %1$s. استعدّ لها.</string>
     <string name="notif_late_title">صلاة %1$s كان وقتها %2$s</string>
     <string name="notif_late_body">وصل هذا التنبيه متأخرًا، فتأكد من وقت الصلاة في التطبيق.</string>
+
+    <!-- Prayer screen -->
+    <string name="prayer_screen_title">مواقيت الصلاة</string>
+    <string name="prayer_loading">جارٍ تحميل المواقيت…</string>
+    <string name="prayer_next_label">الصلاة القادمة</string>
+    <string name="prayer_next_tomorrow">غدًا</string>
+    <string name="prayer_remaining">متبقي %1$s</string>
+    <string name="prayer_location_current">موقعك الحالي</string>
+    <string name="prayer_location_coordinates">%1$s، %2$s</string>
+    <string name="prayer_location_auto_tag">تحديد تلقائي</string>
+    <string name="prayer_location_manual_tag">موقع يدوي</string>
+    <string name="prayer_update_location">تحديث الموقع</string>
+    <string name="prayer_not_configured_title">حدّد موقعك لعرض المواقيت</string>
+    <string name="prayer_not_configured_body">تُحسب المواقيت على جهازك دون إنترنت. اختر مدينتك أو أدخل الإحداثيات يدويًا، أو اسمح بتحديد موقعك مرة واحدة.</string>
+    <string name="prayer_set_location">تحديد الموقع</string>
+    <string name="prayer_error_location">بيانات الموقع المحفوظة غير صالحة، لذلك لا يمكن عرض المواقيت. حدّث الموقع من الإعدادات.</string>
+    <string name="prayer_error_calculation">تعذّر حساب المواقيت لهذا الموقع. جرّب موقعًا أو طريقة حساب أخرى.</string>
+    <string name="prayer_schedule_title">جدول اليوم</string>
+    <string name="prayer_state_upcoming">قادمة</string>
+    <string name="prayer_state_next">التالية</string>
+    <string name="prayer_state_passed">مضى</string>
+    <string name="prayer_state_completed">صليت</string>
+    <string name="prayer_state_unrecorded">غير مسجّلة</string>
+    <string name="prayer_sunrise_note">وقت الشروق، وليس صلاة</string>
+    <string name="prayer_mark_done">صليت</string>
+    <string name="prayer_not_yet">لم يحن وقتها بعد</string>
+    <string name="prayer_undo">تراجع</string>
+    <string name="prayer_notification_on">الإشعار مفعّل</string>
+    <string name="prayer_notification_off">الإشعار متوقف</string>
+    <string name="prayer_summary_title">إنجاز اليوم</string>
+    <string name="prayer_summary_done">%1$d من 5 صلوات مسجّلة</string>
+    <string name="prayer_summary_remaining">المتبقي للتسجيل: %1$d</string>
+    <string name="prayer_summary_percent">%1$d%%</string>
+    <string name="prayer_summary_note">تُحتسب الصلوات الخمس فقط، وما سجّلته أنت فقط.</string>
+    <string name="prayer_history">سجل الصلوات</string>
+    <string name="prayer_settings">إعدادات الصلاة</string>
+    <string name="prayer_save_error">تعذّر حفظ التسجيل. حاول مرة أخرى.</string>
+
+    <!-- Home prayer card -->
+    <string name="home_prayer_setup">حدّد موقعك لعرض مواقيت الصلاة</string>
+    <string name="home_prayer_open">اضغط لعرض كل المواقيت</string>
+    <string name="home_prayer_summary">اليوم: %1$d من 5 صلوات مسجّلة</string>
+    <string name="home_prayer_unavailable">تعذّر عرض المواقيت. افتح مواقيت الصلاة للتفاصيل.</string>
+
+    <!-- History -->
+    <string name="history_title">سجل الصلوات</string>
+    <string name="history_subtitle">آخر 30 يومًا، وما سجّلته أنت فقط</string>
+    <string name="history_empty_title">لا يوجد سجل بعد</string>
+    <string name="history_empty_body">عند تسجيل صلواتك ستظهر هنا. لا نفترض أي صلاة لم تسجّلها.</string>
+    <string name="history_day_count">%1$d/5</string>
+    <string name="history_today">اليوم</string>
+    <string name="history_yesterday">أمس</string>
+
+    <!-- Prayer settings -->
+    <string name="ps_title">إعدادات الصلاة</string>
+    <string name="ps_location_title">الموقع</string>
+    <string name="ps_location_none">لم يتم اختيار موقع بعد</string>
+    <string name="ps_location_privacy">يُستخدم الموقع لحساب المواقيت على جهازك فقط، ولا يُرسل إلى أي جهة. نطلب إذن الموقع التقريبي فقط، وفقط عند ضغطك على زر التحديد، ولا نستخدم الموقع في الخلفية.</string>
+    <string name="ps_detect">تحديد موقعي تلقائيًا</string>
+    <string name="ps_detecting">جارٍ تحديد الموقع…</string>
+    <string name="ps_manual">اختيار أو إدخال موقع يدويًا</string>
+    <string name="ps_location_denied">لم يتم السماح بالوصول إلى الموقع. يمكنك اختيار مدينتك أو إدخال الإحداثيات يدويًا.</string>
+    <string name="ps_location_disabled">خدمة الموقع في الجهاز متوقفة. فعّلها أو اختر موقعًا يدويًا.</string>
+    <string name="ps_location_unavailable">تعذّر الحصول على الموقع الآن. حاول لاحقًا أو اختر موقعًا يدويًا.</string>
+    <string name="ps_manual_title">موقع يدوي</string>
+    <string name="ps_manual_cities">اختر مدينة</string>
+    <string name="ps_manual_or">أو أدخل البيانات بنفسك (لا يحتاج إنترنت)</string>
+    <string name="ps_manual_name">اسم المدينة (اختياري)</string>
+    <string name="ps_manual_country">الدولة (اختياري)</string>
+    <string name="ps_manual_lat">خط العرض (من -90 إلى 90)</string>
+    <string name="ps_manual_lon">خط الطول (من -180 إلى 180)</string>
+    <string name="ps_manual_zone">المنطقة الزمنية (مثل Africa/Cairo)</string>
+    <string name="ps_manual_error_lat">خط العرض غير صالح</string>
+    <string name="ps_manual_error_lon">خط الطول غير صالح</string>
+    <string name="ps_manual_error_zone">المنطقة الزمنية غير معروفة</string>
+    <string name="ps_manual_save">حفظ الموقع</string>
+    <string name="ps_cancel">إلغاء</string>
+    <string name="ps_calc_title">طريقة الحساب</string>
+    <string name="ps_method_label">جهة الحساب</string>
+    <string name="ps_method_recommended">موصى بها لمصر</string>
+    <string name="ps_asr_label">حساب العصر</string>
+    <string name="ps_adjust_title">تعديل الدقائق لكل صلاة</string>
+    <string name="ps_adjust_value">%1$+d د</string>
+    <string name="ps_adjust_plus">زيادة دقيقة</string>
+    <string name="ps_adjust_minus">إنقاص دقيقة</string>
+    <string name="ps_notif_title">الإشعارات</string>
+    <string name="ps_notif_master">تفعيل إشعارات الصلاة</string>
+    <string name="ps_notif_master_desc">تنبيه عند وقت كل صلاة، مع إمكانية تذكير قبلها. نطلب إذن الإشعارات فقط عند تفعيل هذا الخيار.</string>
+    <string name="ps_notif_denied">لم يتم السماح بالإشعارات، فلن تصلك التنبيهات. يمكنك السماح بها من إعدادات التطبيق في النظام.</string>
+    <string name="ps_notif_open_system">فتح إعدادات الإشعارات في النظام</string>
+    <string name="ps_exact_title">دقة وقت التنبيه</string>
+    <string name="ps_exact_ok">التنبيهات تُجدول في وقتها بدقة، لكن لا يمكن ضمان وصولها في كل حالات توفير الطاقة.</string>
+    <string name="ps_exact_off">إذن «المنبهات والتذكيرات» غير مفعّل، لذلك قد يتأخر التنبيه عدة دقائق. فعّله لتنبيه أدق.</string>
+    <string name="ps_exact_open">فتح إعدادات المنبهات</string>
+    <string name="ps_notif_prayer_enabled">تنبيه %1$s</string>
+    <string name="ps_notif_reminder">تذكير قبل الصلاة</string>
+    <string name="ps_notif_reminder_none">بدون</string>
+    <string name="ps_notif_reminder_minutes">%1$d د</string>
+    <string name="ps_notif_sound">الصوت</string>
+    <string name="ps_notif_sound_default">صوت الإشعارات</string>
+    <string name="ps_notif_sound_silent">صامت</string>
+    <string name="ps_notif_sound_note">لاختيار نغمة أخرى استخدم إعدادات قناة الإشعارات في النظام. الأذان الصوتي الكامل غير متوفر في هذا الإصدار.</string>
+    <string name="ps_display_title">العرض</string>
+    <string name="ps_display_24h">نظام 24 ساعة</string>
+    <string name="ps_hijri_label">تصحيح التاريخ الهجري (أيام)</string>
+    <string name="ps_hijri_note">يعتمد التاريخ الهجري على تقويم أم القرى ويمكن أن يختلف يومًا عن رؤية الهلال في بلدك.</string>
+    <string name="settings_prayer_entry">إعدادات الصلاة</string>
+    <string name="settings_prayer_entry_desc">الموقع وطريقة الحساب والإشعارات</string>
 </resources>
+

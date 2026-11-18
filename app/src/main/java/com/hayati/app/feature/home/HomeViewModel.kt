@@ -3,43 +3,55 @@ package com.hayati.app.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hayati.app.core.common.TimeProvider
+import com.hayati.app.core.common.clockTicker
 import com.hayati.app.domain.model.OverviewEntry
 import com.hayati.app.domain.model.OverviewItem
 import com.hayati.app.domain.model.OverviewValue
 import com.hayati.app.domain.model.Task
+import com.hayati.app.domain.prayer.model.PrayerSnapshot
+import com.hayati.app.domain.prayer.usecase.PrayerSnapshotProvider
 import com.hayati.app.domain.repository.TaskRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 
 data class HomeUiState(
     val overview: List<OverviewEntry>,
+    /** Real prayer data from the same provider the Prayer screen uses. */
+    val prayer: PrayerSnapshot = PrayerSnapshot.Loading,
 )
 
 /**
- * Only the tasks overview item has a real data source (today's tasks from the database).
- * Prayer, Quran and adhkar items stay [OverviewValue.Unavailable] until those features exist.
+ * Tasks come from the task database and prayer information from the shared
+ * [PrayerSnapshotProvider]. Quran and adhkar stay [OverviewValue.Unavailable] until they exist.
  */
 class HomeViewModel(
     private val repository: TaskRepository,
     private val time: TimeProvider,
+    prayerProvider: PrayerSnapshotProvider,
+    ticker: Flow<Long> = clockTicker(time),
 ) : ViewModel() {
 
     private val day = MutableStateFlow(time.todayEpochDay())
 
+    private val sharedTicker = ticker.shareIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), replay = 1)
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState: StateFlow<HomeUiState> = day
-        .flatMapLatest { epochDay -> repository.observeTasksForDay(epochDay) }
-        .map { tasks -> HomeUiState(overview = buildOverview(tasks)) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
-            initialValue = HomeUiState(overview = buildOverview(tasks = null)),
-        )
+    private val tasks: Flow<List<Task>> = day.flatMapLatest { epochDay -> repository.observeTasksForDay(epochDay) }
+
+    val uiState: StateFlow<HomeUiState> = combine(tasks, prayerProvider.observe(sharedTicker)) { tasks, prayer ->
+        HomeUiState(overview = buildOverview(tasks), prayer = prayer)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
+        initialValue = HomeUiState(overview = buildOverview(tasks = null)),
+    )
 
     /** Call when the screen becomes visible so the overview follows the calendar day. */
     fun refreshDay() {

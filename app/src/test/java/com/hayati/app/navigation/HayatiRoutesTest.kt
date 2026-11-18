@@ -24,6 +24,8 @@ class HayatiRoutesTest {
     fun every_route_in_the_graph_is_unique() {
         val all = HayatiRoutes.topLevel +
             HayatiRoutes.SETTINGS +
+            HayatiRoutes.PRAYER_SETTINGS +
+            HayatiRoutes.PRAYER_HISTORY +
             WorshipSection.entries.map { it.route }
 
         assertEquals(all.size, all.toSet().size)

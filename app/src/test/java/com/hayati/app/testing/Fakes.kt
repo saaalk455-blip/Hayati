@@ -224,3 +224,14 @@ class FakeNotificationPermission(var allowed: Boolean = true) :
     com.hayati.app.domain.prayer.repository.NotificationPermissionChecker {
     override fun areNotificationsAllowed() = allowed
 }
+
+class FakeLocationProvider(var result: com.hayati.app.data.prayer.location.LocationResult) :
+    com.hayati.app.data.prayer.location.LocationProvider {
+    var calls = 0
+        private set
+
+    override suspend fun requestCurrentLocation(): com.hayati.app.data.prayer.location.LocationResult {
+        calls++
+        return result
+    }
+}

@@ -2,10 +2,21 @@ package com.hayati.app.feature.home
 
 import com.hayati.app.domain.model.OverviewItem
 import com.hayati.app.domain.model.OverviewValue
+import com.hayati.app.domain.prayer.model.CalculationMethod
+import com.hayati.app.domain.prayer.model.LocationSource
+import com.hayati.app.domain.prayer.model.Prayer
+import com.hayati.app.domain.prayer.model.PrayerLocation
+import com.hayati.app.domain.prayer.model.PrayerSettings
+import com.hayati.app.domain.prayer.model.PrayerSnapshot
+import com.hayati.app.domain.prayer.usecase.PrayerSnapshotProvider
+import com.hayati.app.testing.FakePrayerLogRepository
+import com.hayati.app.testing.FakePrayerSettingsRepository
+import com.hayati.app.testing.FakePrayerTimeCalculator
 import com.hayati.app.testing.FakeTaskRepository
 import com.hayati.app.testing.FakeTimeProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -37,8 +48,17 @@ class HomeViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private val prayerSettings = FakePrayerSettingsRepository(PrayerSettings.default(CalculationMethod.EGYPTIAN))
+    private val prayerLogs = FakePrayerLogRepository()
+    private val prayerProvider = PrayerSnapshotProvider(prayerSettings, prayerLogs, FakePrayerTimeCalculator())
+
+    // 2026-06-15 04:00 UTC: after the fake Fajr (03:00), before Dhuhr (10:00).
+    private val prayerNow = java.time.Instant.parse("2026-06-15T04:00:00Z").toEpochMilli()
+
+    private fun newViewModel() = HomeViewModel(repository, time, prayerProvider, ticker = flowOf(prayerNow))
+
     private fun TestScope.createViewModel(): HomeViewModel {
-        val viewModel = HomeViewModel(repository, time)
+        val viewModel = newViewModel()
         backgroundScope.launch(dispatcher) { viewModel.uiState.collect { } }
         return viewModel
     }
@@ -62,8 +82,6 @@ class HomeViewModelTest {
         val viewModel = createViewModel()
 
         val unavailable = listOf(
-            OverviewItem.NextPrayer,
-            OverviewItem.TimeRemaining,
             OverviewItem.QuranWird,
             OverviewItem.Adhkar,
         )
@@ -72,7 +90,7 @@ class HomeViewModelTest {
 
     @Test
     fun before_any_data_arrives_every_item_is_unavailable() {
-        val viewModel = HomeViewModel(repository, time)
+        val viewModel = newViewModel()
 
         assertTrue(viewModel.uiState.value.overview.all { it.value == OverviewValue.Unavailable })
     }
@@ -108,5 +126,26 @@ class HomeViewModelTest {
         viewModel.refreshDay()
 
         assertEquals(OverviewValue.TasksProgress(0, 0), viewModel.valueOf(OverviewItem.Tasks))
+    }
+
+    @Test
+    fun prayer_is_not_configured_until_a_location_exists() = runTest(dispatcher) {
+        val viewModel = createViewModel()
+
+        assertEquals(PrayerSnapshot.NotConfigured, viewModel.uiState.value.prayer)
+    }
+
+    @Test
+    fun prayer_card_uses_real_calculated_data_once_a_location_is_set() = runTest(dispatcher) {
+        prayerSettings.update {
+            it.copy(location = PrayerLocation("مدينة", "بلد", 10.0, 10.0, "UTC", LocationSource.MANUAL))
+        }
+        prayerLogs.setCompleted(java.time.LocalDate.of(2026, 6, 15).toEpochDay(), Prayer.FAJR, true)
+        val viewModel = createViewModel()
+
+        val prayer = viewModel.uiState.value.prayer as PrayerSnapshot.Ready
+        assertEquals(Prayer.DHUHR, prayer.next?.prayer)
+        assertEquals(6 * 60 * 60 * 1000L, prayer.remainingMillis)
+        assertEquals(1, prayer.summary.completed)
     }
 }
