@@ -39,7 +39,8 @@ Only approved specifications define scope. Items below are status, not commitmen
 
 - [x] Counter, per-day progress, Room v3, screen, tests (170 in CI)
 - [ ] Reviewed, licensed adhkar text in `assets/adhkar.json` (blocks real use)
-- [ ] Home "أذكار اليوم" card, reminders, device test
+- [x] Home adhkar card (real progress, opens the category)
+- [ ] Reminders (separate part after content approval), device test
 
 ## Next phase (recommendation, not started)
 

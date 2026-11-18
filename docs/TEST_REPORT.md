@@ -1,5 +1,20 @@
 # Test Report
 
+## 2026-11-18 — PHASE5-001 completion pass (CI run 44386637666)
+
+Run: https://github.com/saaalk455-blip/Hayati/actions/runs/44386637666 — conclusion **success**.
+
+| Check | Result |
+|---|---|
+| Tests | **190 executed, 0 failures, 0 errors, 1 skipped** |
+| The skipped test | `AdhkarShippedContentTest` release gate ("every category has real adhkar"): skipped on purpose because the shipped file has no adhkar (KI-025) |
+| APK | `hayati-debug.apk` 12,463,330 bytes, versionCode 5 / versionName 0.5.0; artifact `hayati-debug-apk` 11,896,938 bytes |
+| `assets/adhkar.json` inside the APK | Present (38 bytes). CI output: `ADHKAR_IN_APK total = 0` |
+
+New/changed tests: `AdhkarHomeProviderTest` 8 (category by local time zone, per-day progress, clamping, completion, fallback, unavailable), `AdhkarReleaseRulesTest` 4, `AdhkarShippedContentTest` 2 (1 skipped), `AdhkarJsonParserTest` 5 (repeat now required, takhrij), `HomeViewModelTest` 11 (adhkar card follows counters and the day), `HayatiRoutesTest` 5, `AdhkarContentUiTest` 8 (takhrij shown).
+
+Not verified: the screen showing real adhkar (no content exists), device behaviour. No result is fabricated.
+
 ## 2026-11-18 — PHASE5-001 (CI run 44377864036, commit `e6ffa83`)
 
 Run: https://github.com/saaalk455-blip/Hayati/actions/runs/44377864036 — conclusion **success**.

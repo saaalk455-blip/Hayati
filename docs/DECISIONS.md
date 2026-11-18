@@ -162,3 +162,13 @@
 
 - `feature/adhkar` -> `feature/prayer-system` -> `feature/tasks-persistence` -> `feature/android-foundation`.
   The owner asked to proceed; merge order is #2, #3, #4, then this PR.
+
+## D-026 — Strict content rules; repeat required; empty file until verified (2026-11-18)
+
+- `repeat` must be present (never assumed). Release rules require source and takhrij. The release
+  gate test is skipped, not passed, while no content ships, so reports cannot overstate completion.
+
+## D-027 — Home adhkar category rule (2026-11-18)
+
+- Local time before 12:00 shows morning, otherwise evening (fallback to the other if empty). This is
+  an app display rule, not a religious ruling, and can be changed without touching stored progress.

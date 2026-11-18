@@ -7,7 +7,7 @@ Last updated: 2026-11-18 (task PHASE5-001)
 **Phase 5 (PHASE5-001, version 0.5.0)** adds the adhkar counter on `feature/adhkar` (stacked on the
 unmerged Phase 4). UI, logic and Room persistence are implemented and CI-verified (170 tests), but
 **no adhkar text is included**, so the feature is not usable yet (KI-025). Not device-tested. Home
-integration is deferred. The paragraphs below describe Phase 4 and earlier.
+card is implemented (real progress, opens the matching category); it shows "غير متاح بعد" until content exists. The paragraphs below describe Phase 4 and earlier.
 
 **Phase 4 (PHASE4-001, version 0.4.0)** adds the prayer system on `feature/prayer-system`, stacked on
 the unmerged Phase 3 branch with the owner's explicit approval. CI run 44222022199 (commit
@@ -50,7 +50,7 @@ this build.
 | Worship hub + section placeholders | Yes | No | No | No | Yes (owner, Phase 2 build) | No |
 | Statistics | Empty state only | No | No | No | Yes (owner, Phase 2 build) | No |
 | Settings | Read-only info + version | No | No | No | Yes (owner, Phase 2 build) | No |
-| Adhkar counter | Yes | Yes (unit-tested) | Yes (Room v3, DB-tested) | No | No | No — **no text content yet** |
+| Adhkar counter + Home card | Yes | Yes (unit-tested) | Yes (Room v3, DB-tested) | No | No | No — **no text content yet** |
 | Quran, Tasbeeh | Not started | – | – | – | – | – |
 
 "Fully verified" is No everywhere because no automated UI tests exist and no complete on-device

@@ -9,6 +9,11 @@
 - Room table `adhkar_progress` (database version 3, `MIGRATION_2_3`), strict JSON content loader.
 - 33 new tests (170 total): counter rules, parser, real Room DAO, v1→v2→v3 migration, ViewModel, Compose UI.
 
+### Added in the completion pass
+- Home adhkar card from the shared source; tap opens the right category (`section/adhkar?category=`).
+- `takhrij` field; `repeat` is now required; release rules (source, takhrij, no placeholders, no duplicates).
+- CI checks that `assets/adhkar.json` is inside the APK. `docs/ADHKAR_CONTENT.md`.
+
 ### Important limitation
 - **No adhkar text is shipped.** `assets/adhkar.json` is empty on purpose; the screen says the
   content is not available yet. Text must come from a reviewed, licensed source (see KI-025).
