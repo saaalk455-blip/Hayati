@@ -4,10 +4,10 @@
 
 Hayati is an Arabic-first, RTL Android app for organizing daily life and worship.
 **Current phase: Phase 4 (prayer system).** Offline prayer-time calculation, location (automatic or
-manual), prayer tracking, and notifications. Phase 3 (persistent tasks) is included. Quran, adhkar
-and statistics are not implemented yet.
+manual), prayer tracking, and notifications. Phase 3 (persistent tasks) is included. Quran and statistics are
+not implemented yet; adhkar has no content yet.
 
-- Package: `com.hayati.app` · Version: `0.4.0` · minSdk 26 · target/compileSdk 36
+- Package: `com.hayati.app` · Version: `0.5.0` · minSdk 26 · target/compileSdk 36
 - No account, no internet permission, no analytics/ads/Firebase. Location is coarse, requested only
   when you tap "detect my location", and never uploaded. See `docs/PRAYER_SYSTEM.md`.
 
@@ -22,6 +22,7 @@ and statistics are not implemented yet.
   a passed, unrecorded prayer is "unrecorded", not "missed"); history; notifications with optional
   reminder. Verified by unit/Robolectric/Compose tests in CI. **Not yet tested on a device; times
   are not yet compared with an official timetable** (see `docs/KNOWN_ISSUES.md`).
+- **Adhkar counter (Phase 5, structure only):** categories, tap counter, per-day progress in Room. **No adhkar text is included yet**, so the screen shows "content not available" (see `docs/KNOWN_ISSUES.md` KI-025).
 - Home dashboard, Worship hub, Statistics empty state, Settings, and
   "coming soon" placeholders for Quran / Adhkar / Tasbeeh.
 - Values that have no real data source are shown as **"غير متاح بعد"** — nothing is invented.

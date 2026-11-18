@@ -144,3 +144,21 @@
 - The Phase 4 spec says to stop if Phase 3 is unmerged. The owner explicitly approved ("موافق") a
   stacked branch: `feature/prayer-system` -> `feature/tasks-persistence` -> `feature/android-foundation`.
   Merge order: #2, #3, then retarget Phase 4 to `main`.
+
+## D-023 — Adhkar text is content, not code (2026-11-18, Phase 5)
+
+- Decision: adhkar texts live in `assets/adhkar.json`, parsed strictly (unique ids, known category,
+  non-blank text, repeat >= 1; one bad entry rejects the file). No text is written from memory or
+  copied from sources whose licence is unclear: islamweb.net asserts "all rights reserved", and
+  public JSON datasets found had no stated licence. The shipped file is empty until a reviewed,
+  licensed source is supplied.
+
+## D-024 — Adhkar counters per local day in Room (2026-11-18)
+
+- One row per (epochDay, category, dhikrId); database version 3 with `MIGRATION_2_3`. A new day
+  starts at zero because there is no row for it; nothing is deleted.
+
+## D-025 — Phase 5 stacked on the unmerged chain (2026-11-18)
+
+- `feature/adhkar` -> `feature/prayer-system` -> `feature/tasks-persistence` -> `feature/android-foundation`.
+  The owner asked to proceed; merge order is #2, #3, #4, then this PR.

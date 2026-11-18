@@ -1,5 +1,28 @@
 # Test Report
 
+## 2026-11-18 — PHASE5-001 (CI run 44377864036, commit `e6ffa83`)
+
+Run: https://github.com/saaalk455-blip/Hayati/actions/runs/44377864036 — conclusion **success**.
+A first run on the previous commit failed: 11 `AdhkarViewModelTest` tests stayed in LOADING because
+the test's collector had not subscribed yet (a test-setup bug, fixed with `runCurrent()`).
+
+| Check | Result |
+|---|---|
+| Tests (`testDebugUnitTest`) | Executed: **170 tests, 0 failures, 0 errors, 0 skipped** (33 new) |
+| Debug APK | Built, `hayati-debug.apk` 12,446,114 bytes (from `e6ffa83`, versionName 0.4.0; the bump to 0.5.0 came in a later commit, see the run on the branch head) |
+
+| New class | Tests | Covers |
+|---|---|---|
+| `AdhkarCounterTest` | 6 | clamping, undo, completion rules |
+| `AdhkarJsonParserTest` | 4 | valid entry, default repeat, empty file, rejection of invalid files |
+| `AdhkarProgressDaoTest` | 5 | real Room: insert/update, unique key, zero rule, day/category isolation |
+| `DatabaseMigrationTest` | 1 (extended) | real v1 file migrated 1→2→3 |
+| `AdhkarViewModelTest` | 11 | states, counting, auto-advance, navigation, categories, day change, storage failure |
+| `AdhkarContentUiTest` | 7 | Compose: text/counter, callbacks, disabled buttons, finished state, empty/error |
+
+Not executed: device install/run, real adhkar content (none exists), Home integration (not built),
+lint. All texts in tests are obvious placeholders. No test results have been fabricated.
+
 ## 2026-11-18 — PHASE4-001 (CI run 44222022199, commit `6bab7b6`)
 
 Run: https://github.com/saaalk455-blip/Hayati/actions/runs/44222022199 — conclusion **success**.

@@ -1,6 +1,6 @@
 # Database Schema
 
-Room database `hayati.db`, **version 2**. `exportSchema = false` (KI-010): no schema JSON is
+Room database `hayati.db`, **version 3**. `exportSchema = false` (KI-010): no schema JSON is
 committed, so migrations are verified by a hand-written test, not by Room's migration test helper.
 
 ## Table `tasks` (version 1, Phase 3)
@@ -32,6 +32,25 @@ row per prayer per day.
 Rules: a row is only written when the user marks a prayer. A prayer with no row is **unrecorded**
 (never "missed"). Reverting a prayer that has no row writes nothing. Rows are never created
 automatically.
+
+## Table `adhkar_progress` (added in version 3, Phase 5)
+
+| Column | Type | Notes |
+|---|---|---|
+| id | INTEGER PK autoincrement | |
+| progressDate | INTEGER NOT NULL | local `epochDay` |
+| category | TEXT NOT NULL | `morning`, `evening`, `after_prayer` |
+| dhikrId | TEXT NOT NULL | id from `assets/adhkar.json` |
+| count | INTEGER NOT NULL | 0..repeat (clamped when read) |
+| updatedAt | INTEGER NOT NULL | epoch millis |
+
+Unique index `index_adhkar_progress_progressDate_category_dhikrId`. A zero count for a dhikr with no
+row writes nothing. The adhkar text is **not** in the database; it is read from the asset file.
+
+## Migration 2 → 3
+
+`MIGRATION_2_3` creates `adhkar_progress` and its unique index; other tables are untouched.
+`DatabaseMigrationTest` builds a real v1 file and migrates 1→2→3.
 
 ## Migration 1 → 2
 

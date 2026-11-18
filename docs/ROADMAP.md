@@ -35,6 +35,12 @@ Only approved specifications define scope. Items below are status, not commitmen
 - [ ] Owner merges PR #2, #3, then retargets and reviews the Phase 4 PR
 - [ ] Later: Adhan audio, high-latitude rules, geocoded city name, schema export
 
+## Phase 5 — Adhkar counter (structure implemented, content missing)
+
+- [x] Counter, per-day progress, Room v3, screen, tests (170 in CI)
+- [ ] Reviewed, licensed adhkar text in `assets/adhkar.json` (blocks real use)
+- [ ] Home "أذكار اليوم" card, reminders, device test
+
 ## Next phase (recommendation, not started)
 
 Pick one feature per phase and keep persistence with it. Suggested order:
