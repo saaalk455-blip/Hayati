@@ -21,12 +21,13 @@ import com.hayati.app.core.designsystem.components.HayatiTopBar
 import com.hayati.app.core.designsystem.theme.HayatiSpacing
 
 /**
- * Settings screen. It intentionally has no switches or toggles: nothing is persisted yet, so a
- * control would only pretend to save a choice. It shows read-only information and the app version.
+ * Settings screen: an entry to the prayer settings (where real, persisted settings live), plus
+ * read-only information and the app version. A control is added only when it saves something real.
  */
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onOpenPrayerSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -41,6 +42,19 @@ fun SettingsScreen(
                 ),
             verticalArrangement = Arrangement.spacedBy(HayatiSpacing.Item),
         ) {
+            HayatiCard(modifier = Modifier.fillMaxWidth(), onClick = onOpenPrayerSettings) {
+                Text(
+                    text = stringResource(R.string.settings_prayer_entry),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = stringResource(R.string.settings_prayer_entry_desc),
+                    modifier = Modifier.padding(top = 8.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             InfoCard(
                 title = stringResource(R.string.settings_appearance_title),
                 body = stringResource(R.string.settings_appearance_body),

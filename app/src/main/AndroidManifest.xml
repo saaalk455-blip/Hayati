@@ -2,10 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
-        Hayati declares no permissions: Phase 2 needs no network, location or storage access.
-        (AndroidX merges one internal signature-level permission, DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION,
-        which is scoped to this app and is not shown to the user.)
+        Permissions (each one is needed by the prayer system; nothing else is requested):
+        - ACCESS_COARSE_LOCATION: only when the user taps "detect my location". Coarse is enough
+          for prayer times. No background location, no fine location.
+        - POST_NOTIFICATIONS (Android 13+): to show prayer notifications. Requested only when the
+          user turns notifications on.
+        - SCHEDULE_EXACT_ALARM (Android 12+): so a prayer alert can fire at the prayer minute. The
+          user may deny it in system settings; the app then falls back to inexact alarms and says so.
+        - RECEIVE_BOOT_COMPLETED: to schedule the alerts again after the phone restarts.
+        There is no INTERNET permission: prayer times are calculated on the device.
+        (AndroidX also merges one internal signature-level permission,
+        DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION, scoped to this app.)
     -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".HayatiApplication"
@@ -24,6 +36,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".core.notifications.PrayerAlarmReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".core.notifications.PrayerSystemEventReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -100,3 +100,47 @@
 - Decision: titles are trimmed, must not be blank, and are capped at 120 characters. Validation
   lives in `TaskTitle` (domain), used by the ViewModel for UI feedback and by the repository as a guard.
 - Deleting a task asks for confirmation; storage failures show a dismissible message, not a crash.
+
+## D-015 — Prayer engine: adhan2 0.0.5 (2026-11-18, Phase 4)
+
+- Decision: use adhan2 (MIT) pinned to 0.0.5. 0.0.7 needs Kotlin 2.4 metadata and 0.0.6 needs Java 21
+  bytecode; both failed in CI against Kotlin 2.1.21 / JDK 17. Adjustments are applied once in our
+  adapter, never in the library. Revisit when the toolchain is upgraded.
+
+## D-016 — Prayer settings in DataStore; prayer logs in Room (2026-11-18)
+
+- Settings are small key/value data, observed as a Flow: DataStore Preferences. Logs are relational
+  and queried by date: Room. Database version 2 via explicit `MIGRATION_1_2`; schema export is still
+  off (KI-010).
+
+## D-017 — Coarse foreground location with the framework LocationManager (2026-11-18)
+
+- Only `ACCESS_COARSE_LOCATION`, one lookup on button tap. No Play Services, no geocoder, no
+  background location, no network. Trade-off: automatic fixes have no city name.
+
+## D-018 — Alarms: AlarmManager; WorkManager only for maintenance (2026-11-18)
+
+- Alerts are `AlarmManager` alarms (exact when `canScheduleExactAlarms()`, otherwise inexact with an
+  honest UI note). WorkManager re-plans every 12 hours but never delivers alerts. Rolling window of
+  today and tomorrow, stable request codes, cancel-then-schedule to avoid duplicates.
+
+## D-019 — Prayer day and tracking date (2026-11-18)
+
+- The prayer day is the local date in the location's IANA time zone, re-derived on every tick. Logs
+  store it as `epochDay`. A passed prayer without a log is "unrecorded", never "missed".
+
+## D-020 — Hijri date source (2026-11-18)
+
+- `java.time` `HijrahChronology` (Umm al-Qura) with own Arabic month names and a ±2 day user offset;
+  hidden outside the supported range. It may differ by a day from local sighting.
+
+## D-021 — Sound: default and silent only (2026-11-18)
+
+- Two channels (`prayer_sound`, `prayer_silent`). Adhan audio is a later, separately licensed
+  enhancement (documented in `PRAYER_SYSTEM.md`).
+
+## D-022 — Phase 4 stacked on unmerged Phase 3 (2026-11-18)
+
+- The Phase 4 spec says to stop if Phase 3 is unmerged. The owner explicitly approved ("موافق") a
+  stacked branch: `feature/prayer-system` -> `feature/tasks-persistence` -> `feature/android-foundation`.
+  Merge order: #2, #3, then retarget Phase 4 to `main`.

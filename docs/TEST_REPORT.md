@@ -1,5 +1,51 @@
 # Test Report
 
+## 2026-11-18 — PHASE4-001 (CI run 44222022199, commit `6bab7b6`)
+
+Run: https://github.com/saaalk455-blip/Hayati/actions/runs/44222022199 — conclusion **success**.
+Environment: GitHub-hosted runner, Temurin JDK 17, Gradle 8.14.3, AGP 8.9.1, Kotlin 2.1.21.
+
+| Check | Result |
+|---|---|
+| Unit, Robolectric and Compose UI tests (`testDebugUnitTest`) | Executed: **137 tests, 0 failures, 0 errors, 0 skipped** |
+| Debug APK (`assembleDebug`) | Executed, succeeded; `hayati-debug.apk`, 12,386,934 bytes (artifact zip 11,825,968 bytes) |
+| APK identity (aapt2) | `com.hayati.app`, versionCode 4, versionName 0.4.0 |
+| APK permissions (aapt2) | ACCESS_COARSE_LOCATION, POST_NOTIFICATIONS, SCHEDULE_EXACT_ALARM, RECEIVE_BOOT_COMPLETED, plus merged WAKE_LOCK, ACCESS_NETWORK_STATE, FOREGROUND_SERVICE and the internal DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION; no INTERNET |
+
+| Class | Tests | Covers |
+|---|---|---|
+| `AdhanPrayerTimeCalculatorTest` | 10 | physical invariants, Hanafi Asr, method difference, adjustment once, DST, invalid input |
+| `PrayerSnapshotProviderTest` | 11 | states, next prayer, midnight/day change, tracking merge |
+| `PrayerPureLogicTest` | 5 | next-prayer resolver, daily summary, history builder |
+| `PrayerLogDaoTest` | 7 | real Room: unique per date+prayer, toggle, revert, persistence |
+| `DatabaseMigrationTest` | 1 | v1 -> v2 keeps tasks, adds `prayer_logs` |
+| `DataStorePrayerSettingsRepositoryTest` | 3 | settings persist and round-trip |
+| `PrayerNotificationCoordinatorTest` | 13 | planning, window, duplicates, late handling, permission, exact vs inexact |
+| `AndroidNotificationIntegrationTest` | 8 | Robolectric AlarmManager/NotificationManager shadows, channels |
+| `NotificationContentTest` | 4 | Arabic content variants |
+| `PrayerViewModelsTest` | 13 | Prayer, History and Settings ViewModels, manual location |
+| `PrayerContentUiTest` | 9 | Compose UI: states, tap target, unrecorded label |
+| `HomeViewModelTest` | 8 | Home with shared prayer source |
+| `TimeFormatterTest` | 4 | clock and countdown formatting |
+| Phase 2/3 classes | 41 | `TaskDaoTest` 7, `TaskRepositoryImplTest` 7, `TasksViewModelTest` 14, `TaskTitleTest` 4, `WorshipSectionTest` 3, `HayatiRoutesTest` 4, `HayatiIconsTest` 2 |
+
+Findings fixed during the run: the completion label under the checkbox was not a tap target
+(UI test failed; whole control made `toggleable`).
+
+### Not executed
+
+| Check | Reason |
+|---|---|
+| Install/launch on a device | No device available to Claude |
+| Real alarm and notification delivery, sound, reboot rescheduling on hardware | Only Robolectric shadows ran (KI-016) |
+| Real location fix and permission dialogs | Needs a device (KI-014) |
+| Comparison with an official prayer timetable | No trusted timetable source was available in the sandbox (KI-015) |
+| Migration test through Room's helper | Schema export is off (KI-010); a manual migration test ran instead |
+| Android lint | Not part of the workflow |
+| Opening the downloaded APK artifact | The sandbox cannot download artifact blobs; existence and size confirmed via the GitHub API |
+
+No test results have been fabricated.
+
 ## 2026-11-17 — PHASE3-001 (CI run 44003589733, commit `33ea17a`)
 
 Run: https://github.com/saaalk455-blip/Hayati/actions/runs/44003589733 — conclusion **success**.

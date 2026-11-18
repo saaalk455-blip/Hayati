@@ -135,10 +135,11 @@ Reports must be factual. Never call a feature complete when only its UI exists. 
 
 ## 10. Current phase
 
-Phase 2 (foundation, PR #2) was owner-tested and is awaiting merge. Phase 3 (persistent daily
-tasks with Room, version 0.3.0) is implemented on `feature/tasks-persistence` (stacked on PR #2),
-passes CI, and awaits owner device testing and review. Prayer times, Quran, adhkar and statistics
-data are not implemented.
+Phase 2 (foundation, PR #2) was owner-tested and is awaiting merge. Phase 3 (tasks, PR #3,
+`feature/tasks-persistence`) awaits owner device testing and merge. Phase 4 (professional prayer
+system, version 0.4.0) is implemented on `feature/prayer-system`, stacked on Phase 3 with the
+owner's explicit approval ("موافق"); it passes CI (137 tests) but is **not device-tested**. Quran,
+adhkar, tasbeeh and statistics data are not implemented.
 **Do not start the next phase or implement features until a specification is approved.**
 See `docs/PROJECT_STATUS.md` for the actual state.
 

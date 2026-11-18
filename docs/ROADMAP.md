@@ -24,12 +24,22 @@ Only approved specifications define scope. Items below are status, not commitmen
 - [ ] Owner device test of the Phase 3 APK
 - [ ] Owner review and merge
 
+## Phase 4 — Professional prayer system (implemented, awaiting device verification)
+
+- [x] Offline calculation engine, methods, Asr, adjustments, time zone/DST
+- [x] Automatic/manual location
+- [x] Prayer screen, tracking (Room), history, Home integration
+- [x] Notifications (AlarmManager + receivers + WorkManager maintenance)
+- [x] 137 tests in CI, debug APK
+- [ ] Owner device test: times vs a trusted local timetable, notifications on the real phone
+- [ ] Owner merges PR #2, #3, then retargets and reviews the Phase 4 PR
+- [ ] Later: Adhan audio, high-latitude rules, geocoded city name, schema export
+
 ## Next phase (recommendation, not started)
 
 Pick one feature per phase and keep persistence with it. Suggested order:
 
-1. Prayer times (calculation engine, location permission flow, notification channel/scheduling) —
-   fills the "next prayer" and "time remaining" Home items.
+1. ~~Prayer times~~ (done in Phase 4, pending device verification).
 2. Quran reading and daily wird (fills the Home wird item).
 3. Adhkar and tasbeeh persistence.
 4. Statistics from real stored data (tasks already store completion times).

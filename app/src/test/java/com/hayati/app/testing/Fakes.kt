@@ -129,3 +129,109 @@ class FakeTaskDao : TaskDao {
         rows.update { list -> list.filterNot { it.id == id } }
     }
 }
+
+// ---- Prayer fakes (Phase 4) ----
+
+class FakePrayerSettingsRepository(
+    initial: com.hayati.app.domain.prayer.model.PrayerSettings,
+) : com.hayati.app.domain.prayer.repository.PrayerSettingsRepository {
+    private val state = MutableStateFlow(initial)
+    override val settings: Flow<com.hayati.app.domain.prayer.model.PrayerSettings> = state
+    var writes = 0
+        private set
+
+    val current get() = state.value
+
+    override suspend fun update(transform: (com.hayati.app.domain.prayer.model.PrayerSettings) -> com.hayati.app.domain.prayer.model.PrayerSettings) {
+        val updated = transform(state.value)
+        if (updated != state.value) {
+            writes++
+            state.value = updated
+        }
+    }
+}
+
+class FakePrayerLogRepository : com.hayati.app.domain.prayer.repository.PrayerLogRepository {
+    private val logs = MutableStateFlow<List<com.hayati.app.domain.prayer.model.PrayerLog>>(emptyList())
+
+    override fun observeDay(epochDay: Long) = logs.map { all -> all.filter { it.epochDay == epochDay } }
+
+    override fun observeRange(fromEpochDay: Long, toEpochDay: Long) =
+        logs.map { all -> all.filter { it.epochDay in fromEpochDay..toEpochDay } }
+
+    override suspend fun setCompleted(epochDay: Long, prayer: com.hayati.app.domain.prayer.model.Prayer, completed: Boolean) {
+        val existing = logs.value.firstOrNull { it.epochDay == epochDay && it.prayer == prayer }
+        logs.value = when {
+            existing == null && !completed -> logs.value
+            existing == null -> logs.value + com.hayati.app.domain.prayer.model.PrayerLog(
+                id = logs.value.size + 1L, epochDay = epochDay, prayer = prayer,
+                completed = true, completedAtMillis = 1L,
+            )
+            else -> logs.value.map { if (it === existing) it.copy(completed = completed) else it }
+        }
+    }
+}
+
+/** Deterministic times: every event at a fixed UTC hour on the requested date. */
+class FakePrayerTimeCalculator(
+    private val hoursUtc: Map<com.hayati.app.domain.prayer.model.PrayerEvent, Int> = mapOf(
+        com.hayati.app.domain.prayer.model.PrayerEvent.FAJR to 3,
+        com.hayati.app.domain.prayer.model.PrayerEvent.SUNRISE to 5,
+        com.hayati.app.domain.prayer.model.PrayerEvent.DHUHR to 10,
+        com.hayati.app.domain.prayer.model.PrayerEvent.ASR to 13,
+        com.hayati.app.domain.prayer.model.PrayerEvent.MAGHRIB to 16,
+        com.hayati.app.domain.prayer.model.PrayerEvent.ISHA to 18,
+    ),
+) : com.hayati.app.domain.prayer.repository.PrayerTimeCalculator {
+    var failure: com.hayati.app.domain.prayer.model.PrayerCalculationException? = null
+    var calls = 0
+        private set
+
+    override suspend fun calculate(
+        location: com.hayati.app.domain.prayer.model.PrayerLocation,
+        date: java.time.LocalDate,
+        settings: com.hayati.app.domain.prayer.model.PrayerCalculationSettings,
+    ): com.hayati.app.domain.prayer.model.PrayerTimes {
+        calls++
+        failure?.let { throw it }
+        return com.hayati.app.domain.prayer.model.PrayerTimes(
+            date = date,
+            zone = location.zone,
+            times = hoursUtc.mapValues { (_, hour) -> date.atTime(hour, 0).toInstant(java.time.ZoneOffset.UTC) },
+        )
+    }
+}
+
+class FakeAlarmScheduler : com.hayati.app.domain.prayer.repository.PrayerAlarmScheduler {
+    val alarms = linkedMapOf<Int, com.hayati.app.domain.prayer.model.PlannedAlert>()
+    var exactAllowed = true
+    var scheduleCalls = 0
+        private set
+
+    override fun canScheduleExact() = exactAllowed
+
+    override fun schedule(alert: com.hayati.app.domain.prayer.model.PlannedAlert) {
+        scheduleCalls++
+        alarms[alert.requestCode] = alert
+    }
+
+    override fun cancel(requestCode: Int) {
+        alarms.remove(requestCode)
+    }
+}
+
+class FakeNotificationPermission(var allowed: Boolean = true) :
+    com.hayati.app.domain.prayer.repository.NotificationPermissionChecker {
+    override fun areNotificationsAllowed() = allowed
+}
+
+class FakeLocationProvider(var result: com.hayati.app.data.prayer.location.LocationResult) :
+    com.hayati.app.data.prayer.location.LocationProvider {
+    var calls = 0
+        private set
+
+    override suspend fun requestCurrentLocation(): com.hayati.app.data.prayer.location.LocationResult {
+        calls++
+        return result
+    }
+}

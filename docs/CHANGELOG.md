@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.4.0 — Phase 4: professional prayer system (unreleased, on `feature/prayer-system`, stacked on `feature/tasks-persistence`)
+
+### Added
+- Offline prayer-time engine (adhan2 0.0.5, MIT): 10 methods, Standard/Hanafi Asr, per-prayer
+  adjustments applied once, time-zone/DST-aware prayer day.
+- Location: automatic (coarse, foreground, one tap, no upload) and manual (country, city, lat, lon,
+  time zone) with an offline city list; manual location is never silently replaced.
+- Prayer screen: location header, optional Hijri date, next-prayer card with countdown, six-event
+  schedule, per-prayer tracking (unrecorded, never "missed"), history screen, daily summary.
+- Room `prayer_logs` (DB version 2, `MIGRATION_1_2`); DataStore prayer settings.
+- Notifications: per-prayer settings, optional reminder, Arabic content, default/silent channels,
+  AlarmManager scheduling (exact when permitted, inexact fallback), reschedule on boot, time-zone
+  and time change, app update and permission change, 12-hour WorkManager maintenance.
+- Home next-prayer card from the same source as the Prayer screen; tap opens Prayer.
+- Prayer settings screen; Settings entry.
+- 90 new tests (137 total) incl. Robolectric and Compose UI tests; CI prints failing test messages.
+- Docs: `PRAYER_SYSTEM.md`, `DATABASE_SCHEMA.md`.
+
+### Changed
+- Permissions added: ACCESS_COARSE_LOCATION, POST_NOTIFICATIONS, SCHEDULE_EXACT_ALARM,
+  RECEIVE_BOOT_COMPLETED (WorkManager also merges WAKE_LOCK, ACCESS_NETWORK_STATE,
+  FOREGROUND_SERVICE). Still no INTERNET.
+- Home `NextPrayer`/`TimeRemaining` placeholder items replaced by the prayer card.
+- App version 0.3.0 → 0.4.0 (versionCode 4); added DataStore 1.1.7, WorkManager 2.10.1.
+
 ## 0.3.0 — Phase 3: persistent daily tasks (unreleased, on `feature/tasks-persistence`)
 
 ### Added

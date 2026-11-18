@@ -1,4 +1,4 @@
-# Architecture (Phase 3)
+# Architecture (Phase 4)
 
 Single Gradle module `:app`, namespace / applicationId `com.hayati.app`. Clean-Architecture
 separation is done with packages, not with extra modules.
@@ -28,7 +28,7 @@ app/src/main/java/com/hayati/app/
 ```
 
 Data flow: `TasksScreen` -> `TasksViewModel` (StateFlow) -> `TaskRepository` -> `TaskDao` -> Room.
-Tasks are scoped to a calendar day (`epochDay`); `refreshDay()` runs on ON_START.
+Tasks (Phase 3) are scoped to a calendar day (`epochDay`); `refreshDay()` runs on ON_START.
 
 ## Key behaviors
 
@@ -42,6 +42,37 @@ Tasks are scoped to a calendar day (`epochDay`); `refreshDay()` runs on ON_START
   (`LocalHayatiColors`); a light scheme can be added in `Theme.kt` without touching screens.
 - **Typography**: letterSpacing is 0 everywhere (positive spacing breaks Arabic joining); the
   system font family is used so Android's Arabic-capable font does the shaping.
+
+## Prayer system (Phase 4)
+
+```
+domain/prayer/model        Prayer, PrayerEvent, PrayerLocation, PrayerSettings, PrayerTimes,
+                           PrayerLog, PrayerSnapshot (Loading|NotConfigured|Error|Ready), PlannedAlert
+domain/prayer/repository   PrayerTimeCalculator, PrayerSettingsRepository, PrayerLogRepository,
+                           PrayerAlarmScheduler, NotificationPermissionChecker
+domain/prayer/usecase      PrayerSnapshotProvider (single source of truth), NextPrayerResolver,
+                           AlertPlanner, HistoryBuilder, ManualLocationValidator
+data/prayer                AdhanPrayerTimeCalculator (adhan2), PrayerLogEntity/Dao/RepositoryImpl,
+                           DataStorePrayerSettingsRepository, AndroidLocationProvider
+core/notifications         PrayerNotificationCoordinator, AlarmManagerPrayerScheduler,
+                           PrayerNotificationPresenter, NotificationContent, PrayerAlarmReceiver,
+                           PrayerSystemEventReceiver, PrayerMaintenanceWorker, PrayerAutomation
+feature/prayer             PrayerScreen/ViewModel, PrayerHistoryScreen/ViewModel,
+                           PrayerSettingsScreen/ViewModel
+```
+
+- Data flow: settings (DataStore) + logs (Room) + a shared 1-second ticker ->
+  `PrayerSnapshotProvider.observe()` -> `PrayerViewModel` and `HomeViewModel`. Home and the Prayer
+  screen therefore always agree. The ticker is `shareIn(WhileSubscribed)` and screens collect with
+  lifecycle awareness, so nothing ticks in the background.
+- Prayer day = local date in the location's own IANA timezone, re-derived on every tick; tracking
+  stores that date as `epochDay`.
+- Notifications: `PrayerAutomation` watches settings and calls the coordinator, which cancels
+  yesterday..+2 days and schedules today and tomorrow with `AlarmManager`. Receivers reschedule on
+  boot, timezone change, time change, app update and exact-alarm permission change. WorkManager
+  runs only a 12-hour maintenance reschedule. Details: `docs/PRAYER_SYSTEM.md`.
+- Database is version 2 (`prayer_logs` added by `MIGRATION_1_2`); see `docs/DATABASE_SCHEMA.md`.
+- Settings screen links to Prayer settings; routes `prayer/settings` and `prayer/history`.
 
 ## SDK and dependency versions
 

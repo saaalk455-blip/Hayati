@@ -63,8 +63,15 @@ jobs:
               for key in totals:
                   totals[key] += int(root.get(key))
               print(root.get("name"), {k: root.get(k) for k in totals})
+              for case in root.iter("testcase"):
+                  for bad in list(case.findall("failure")) + list(case.findall("error")):
+                      print("  FAILED:", case.get("name"), "->", (bad.get("message") or "")[:400])
           print("TOTAL", totals)
           PY
+
+      - name: Show resolved prayer-engine dependencies
+        if: always()
+        run: ./gradlew -q :app:dependencies --configuration debugRuntimeClasspath | grep -E "adhan|datetime|kotlin-stdlib" | sort -u | head -20
 
       - name: Build debug APK
         run: ./gradlew --stacktrace assembleDebug

@@ -17,6 +17,8 @@ object HayatiRoutes {
     const val TASKS = "tasks"
     const val STATISTICS = "statistics"
     const val SETTINGS = "settings"
+    const val PRAYER_SETTINGS = "prayer/settings"
+    const val PRAYER_HISTORY = "prayer/history"
 
     val topLevel: List<String> = listOf(HOME, WORSHIP, TASKS, STATISTICS)
 }
