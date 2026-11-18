@@ -86,6 +86,22 @@ class AdhkarContentUiTest {
     }
 
     @Test
+    fun `the source and takhrij are shown when the content provides them`() {
+        val documented = d1.copy(takhrij = "تخريج اختبار")
+        show(
+            ready().copy(
+                categories = listOf(
+                    CategoryProgress(AdhkarCategory.MORNING, listOf(DhikrProgress(documented, 0))),
+                    CategoryProgress(AdhkarCategory.EVENING, emptyList()),
+                    CategoryProgress(AdhkarCategory.AFTER_PRAYER, emptyList()),
+                ),
+            ),
+        )
+        compose.onNodeWithText("المصدر: مرجع اختبار").assertExists()
+        compose.onNodeWithText("التخريج: تخريج اختبار").assertExists()
+    }
+
+    @Test
     fun `empty content explains that the texts are not added yet and shows no adhkar`() {
         show(AdhkarUiState(status = AdhkarStatus.EMPTY))
         compose.onNodeWithText("المحتوى غير متوفر بعد").assertExists()

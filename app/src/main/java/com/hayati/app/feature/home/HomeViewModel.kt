@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hayati.app.core.common.TimeProvider
 import com.hayati.app.core.common.clockTicker
+import com.hayati.app.domain.adhkar.usecase.AdhkarHomeProvider
+import com.hayati.app.domain.adhkar.usecase.AdhkarHomeState
 import com.hayati.app.domain.model.OverviewEntry
 import com.hayati.app.domain.model.OverviewItem
 import com.hayati.app.domain.model.OverviewValue
@@ -25,16 +27,20 @@ data class HomeUiState(
     val overview: List<OverviewEntry>,
     /** Real prayer data from the same provider the Prayer screen uses. */
     val prayer: PrayerSnapshot = PrayerSnapshot.Loading,
+    /** Real adhkar progress from the same source as the Adhkar screen. */
+    val adhkar: AdhkarHomeState = AdhkarHomeState.Loading,
 )
 
 /**
  * Tasks come from the task database and prayer information from the shared
- * [PrayerSnapshotProvider]. Quran and adhkar stay [OverviewValue.Unavailable] until they exist.
+ * [PrayerSnapshotProvider]. Adhkar progress comes from the shared [AdhkarHomeProvider]. The Quran wird stays
+ * [OverviewValue.Unavailable] until it exists.
  */
 class HomeViewModel(
     private val repository: TaskRepository,
     private val time: TimeProvider,
     prayerProvider: PrayerSnapshotProvider,
+    adhkarProvider: AdhkarHomeProvider,
     ticker: Flow<Long> = clockTicker(time),
 ) : ViewModel() {
 
@@ -45,8 +51,12 @@ class HomeViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val tasks: Flow<List<Task>> = day.flatMapLatest { epochDay -> repository.observeTasksForDay(epochDay) }
 
-    val uiState: StateFlow<HomeUiState> = combine(tasks, prayerProvider.observe(sharedTicker)) { tasks, prayer ->
-        HomeUiState(overview = buildOverview(tasks), prayer = prayer)
+    val uiState: StateFlow<HomeUiState> = combine(
+        tasks,
+        prayerProvider.observe(sharedTicker),
+        adhkarProvider.observe(day, sharedTicker),
+    ) { tasks, prayer, adhkar ->
+        HomeUiState(overview = buildOverview(tasks), prayer = prayer, adhkar = adhkar)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),

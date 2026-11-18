@@ -31,8 +31,15 @@ class AdhkarJsonParserTest {
     }
 
     @Test
-    fun `a missing repeat defaults to one`() {
-        assertEquals(1, AdhkarJsonParser.parse(file(item(repeat = ""))).single().repeat)
+    fun `a missing repeat is rejected, never assumed to be one`() {
+        assertThrows(AdhkarContentException::class.java) { AdhkarJsonParser.parse(file(item(repeat = ""))) }
+    }
+
+    @Test
+    fun `takhrij is read when present and empty when absent`() {
+        val withTakhrij = """{"id":"t1","category":"evening","text":"نص اختبار","repeat":1,"source":"م","takhrij":"تخريج اختبار"}"""
+        assertEquals("تخريج اختبار", AdhkarJsonParser.parse(file(withTakhrij)).single().takhrij)
+        assertEquals("", AdhkarJsonParser.parse(file(item())).single().takhrij)
     }
 
     @Test

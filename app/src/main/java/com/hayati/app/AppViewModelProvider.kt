@@ -16,7 +16,12 @@ object AppViewModelProvider {
     val Factory: ViewModelProvider.Factory = viewModelFactory {
         initializer {
             val container = hayatiApplication().container
-            HomeViewModel(container.taskRepository, container.timeProvider, container.prayerSnapshotProvider)
+            HomeViewModel(
+                container.taskRepository,
+                container.timeProvider,
+                container.prayerSnapshotProvider,
+                container.adhkarHomeProvider,
+            )
         }
         initializer {
             val container = hayatiApplication().container

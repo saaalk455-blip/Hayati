@@ -21,6 +21,8 @@
     <string name="adhkar_next">التالي</string>
     <string name="adhkar_previous">السابق</string>
     <string name="adhkar_source_format">المصدر: %1$s</string>
+    <string name="adhkar_takhrij_format">التخريج: %1$s</string>
+    <string name="home_adhkar_title">أذكار %1$s</string>
     <string name="adhkar_save_failed">تعذّر حفظ العدّاد. حاول مرة أخرى.</string>
     <string name="adhkar_dismiss">إغلاق</string>
 </resources>

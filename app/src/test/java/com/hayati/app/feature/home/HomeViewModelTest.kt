@@ -1,5 +1,9 @@
 package com.hayati.app.feature.home
 
+import com.hayati.app.domain.adhkar.model.AdhkarCategory
+import com.hayati.app.domain.adhkar.model.Dhikr
+import com.hayati.app.domain.adhkar.usecase.AdhkarHomeProvider
+import com.hayati.app.domain.adhkar.usecase.AdhkarHomeState
 import com.hayati.app.domain.model.OverviewItem
 import com.hayati.app.domain.model.OverviewValue
 import com.hayati.app.domain.prayer.model.CalculationMethod
@@ -12,6 +16,8 @@ import com.hayati.app.domain.prayer.usecase.PrayerSnapshotProvider
 import com.hayati.app.testing.FakePrayerLogRepository
 import com.hayati.app.testing.FakePrayerSettingsRepository
 import com.hayati.app.testing.FakePrayerTimeCalculator
+import com.hayati.app.testing.FakeAdhkarContentSource
+import com.hayati.app.testing.FakeAdhkarProgressRepository
 import com.hayati.app.testing.FakeTaskRepository
 import com.hayati.app.testing.FakeTimeProvider
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +61,18 @@ class HomeViewModelTest {
     // 2026-06-15 04:00 UTC: after the fake Fajr (03:00), before Dhuhr (10:00).
     private val prayerNow = java.time.Instant.parse("2026-06-15T04:00:00Z").toEpochMilli()
 
-    private fun newViewModel() = HomeViewModel(repository, time, prayerProvider, ticker = flowOf(prayerNow))
+    private val adhkarContent = FakeAdhkarContentSource(
+        listOf(
+            Dhikr("m1", AdhkarCategory.MORNING, "نص اختبار ١", 1, ""),
+            Dhikr("m2", AdhkarCategory.MORNING, "نص اختبار ٢", 1, ""),
+        ),
+    )
+    private val adhkarProgress = FakeAdhkarProgressRepository()
+
+    private fun newViewModel() = HomeViewModel(
+        repository, time, prayerProvider, AdhkarHomeProvider(adhkarContent, adhkarProgress),
+        ticker = flowOf(prayerNow),
+    )
 
     private fun TestScope.createViewModel(): HomeViewModel {
         val viewModel = newViewModel()
@@ -83,9 +100,41 @@ class HomeViewModelTest {
 
         val unavailable = listOf(
             OverviewItem.QuranWird,
-            OverviewItem.Adhkar,
         )
         assertTrue(unavailable.all { viewModel.valueOf(it) == OverviewValue.Unavailable })
+    }
+
+    @Test
+    fun adhkar_card_shows_real_progress_and_follows_the_counters() = runTest(dispatcher) {
+        val viewModel = createViewModel()
+        // prayerNow is 04:00 UTC; the provider uses the device zone, so only check the shape here.
+        val first = viewModel.uiState.value.adhkar
+        assertTrue(first is AdhkarHomeState.Ready)
+        assertEquals(0, (first as AdhkarHomeState.Ready).doneCount)
+        assertEquals(2, first.total)
+
+        adhkarProgress.setCount(100L, first.category, "m1", 1)
+        val after = viewModel.uiState.value.adhkar as AdhkarHomeState.Ready
+        assertEquals(1, after.doneCount)
+    }
+
+    @Test
+    fun adhkar_card_is_unavailable_when_there_is_no_content() = runTest(dispatcher) {
+        adhkarContent.adhkar = emptyList()
+        val viewModel = createViewModel()
+        assertEquals(AdhkarHomeState.Unavailable, viewModel.uiState.value.adhkar)
+    }
+
+    @Test
+    fun adhkar_card_moves_to_the_new_day_with_zero_progress() = runTest(dispatcher) {
+        val viewModel = createViewModel()
+        val category = (viewModel.uiState.value.adhkar as AdhkarHomeState.Ready).category
+        adhkarProgress.setCount(100L, category, "m1", 1)
+        adhkarProgress.setCount(100L, category, "m2", 1)
+        assertTrue((viewModel.uiState.value.adhkar as AdhkarHomeState.Ready).isComplete)
+        time.today = 101L
+        viewModel.refreshDay()
+        assertEquals(0, (viewModel.uiState.value.adhkar as AdhkarHomeState.Ready).doneCount)
     }
 
     @Test

@@ -20,6 +20,7 @@ import com.hayati.app.data.prayer.repository.PrayerLogRepositoryImpl
 import com.hayati.app.data.repository.TaskRepositoryImpl
 import com.hayati.app.domain.adhkar.repository.AdhkarContentSource
 import com.hayati.app.domain.adhkar.repository.AdhkarProgressRepository
+import com.hayati.app.domain.adhkar.usecase.AdhkarHomeProvider
 import com.hayati.app.domain.prayer.model.CalculationMethod
 import com.hayati.app.domain.prayer.repository.PrayerAlarmScheduler
 import com.hayati.app.domain.prayer.repository.PrayerLogRepository
@@ -75,6 +76,10 @@ class AppContainer(context: Context) {
 
     val adhkarProgressRepository: AdhkarProgressRepository by lazy {
         AdhkarProgressRepositoryImpl(dao = database.adhkarProgressDao(), time = timeProvider)
+    }
+
+    val adhkarHomeProvider: AdhkarHomeProvider by lazy {
+        AdhkarHomeProvider(adhkarContentSource, adhkarProgressRepository)
     }
 
     val prayerTimeCalculator: PrayerTimeCalculator by lazy { AdhanPrayerTimeCalculator() }

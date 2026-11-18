@@ -20,6 +20,13 @@ object HayatiRoutes {
     const val PRAYER_SETTINGS = "prayer/settings"
     const val PRAYER_HISTORY = "prayer/history"
 
+    /** Adhkar screen; the optional `category` argument (an `AdhkarCategory.key`) preselects a tab. */
+    const val ADHKAR_PATTERN = "section/adhkar?category={category}"
+    const val ADHKAR_CATEGORY_ARG = "category"
+
+    fun adhkar(categoryKey: String? = null): String =
+        if (categoryKey == null) "section/adhkar" else "section/adhkar?category=$categoryKey"
+
     val topLevel: List<String> = listOf(HOME, WORSHIP, TASKS, STATISTICS)
 }
 

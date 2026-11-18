@@ -14,8 +14,8 @@ enum class AdhkarCategory(val key: String) {
 
 /**
  * One dhikr as stored in the content file. [repeat] is how many times it is recited (at least 1).
- * [source] is the reference printed under the text; it must come from the content file, never be
- * invented by the app.
+ * [source] and [takhrij] are printed under the text; they must come from the content file, never
+ * be invented by the app.
  */
 data class Dhikr(
     val id: String,
@@ -23,6 +23,8 @@ data class Dhikr(
     val text: String,
     val repeat: Int,
     val source: String,
+    /** Authentication reference (تخريج), exactly as supplied by the content file. */
+    val takhrij: String = "",
 )
 
 /** A dhikr with today's counter. [count] is always within 0..[Dhikr.repeat]. */

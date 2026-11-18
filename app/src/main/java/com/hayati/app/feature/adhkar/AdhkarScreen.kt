@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,10 +45,12 @@ import com.hayati.app.domain.adhkar.model.DhikrProgress
 fun AdhkarScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    initialCategory: AdhkarCategory? = null,
     viewModel: AdhkarViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LifecycleEventEffect(Lifecycle.Event.ON_START) { viewModel.refreshDay() }
+    LaunchedEffect(initialCategory) { initialCategory?.let(viewModel::select) }
     Column(modifier = modifier.fillMaxSize()) {
         HayatiTopBar(title = stringResource(R.string.adhkar_title), onBack = onBack)
         AdhkarContent(
@@ -191,6 +194,13 @@ private fun DhikrCard(current: DhikrProgress, index: Int, total: Int, onTap: () 
         if (current.dhikr.source.isNotEmpty()) {
             Text(
                 text = stringResource(R.string.adhkar_source_format, current.dhikr.source),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        if (current.dhikr.takhrij.isNotEmpty()) {
+            Text(
+                text = stringResource(R.string.adhkar_takhrij_format, current.dhikr.takhrij),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
