@@ -64,6 +64,30 @@ fun PrayerScreen(
     val snapshot by viewModel.uiState.collectAsStateWithLifecycle()
     val saveFailed by viewModel.saveFailed.collectAsStateWithLifecycle()
 
+    PrayerContent(
+        snapshot = snapshot,
+        saveFailed = saveFailed,
+        onBack = onBack,
+        onOpenSettings = onOpenSettings,
+        onOpenHistory = onOpenHistory,
+        onToggle = viewModel::setCompleted,
+        onDismissError = viewModel::dismissError,
+        modifier = modifier,
+    )
+}
+
+/** Stateless screen content: everything it shows comes from [snapshot], so it is easy to test. */
+@Composable
+fun PrayerContent(
+    snapshot: PrayerSnapshot,
+    saveFailed: Boolean,
+    onBack: () -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenHistory: () -> Unit,
+    onToggle: (com.hayati.app.domain.prayer.model.Prayer, Boolean) -> Unit,
+    onDismissError: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier.fillMaxSize()) {
         HayatiTopBar(title = stringResource(R.string.prayer_screen_title), onBack = onBack)
         LazyColumn(
@@ -84,7 +108,7 @@ fun PrayerScreen(
                                 color = MaterialTheme.colorScheme.error,
                                 style = MaterialTheme.typography.bodyMedium,
                             )
-                            TextButton(onClick = viewModel::dismissError) { Text(stringResource(R.string.tasks_error_dismiss)) }
+                            TextButton(onClick = onDismissError) { Text(stringResource(R.string.tasks_error_dismiss)) }
                         }
                     }
                 }
@@ -120,7 +144,7 @@ fun PrayerScreen(
                     state = state,
                     onOpenSettings = onOpenSettings,
                     onOpenHistory = onOpenHistory,
-                    onToggle = viewModel::setCompleted,
+                    onToggle = onToggle,
                 )
             }
         }
