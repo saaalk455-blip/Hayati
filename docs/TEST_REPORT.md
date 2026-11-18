@@ -9,7 +9,8 @@ the test's collector had not subscribed yet (a test-setup bug, fixed with `runCu
 | Check | Result |
 |---|---|
 | Tests (`testDebugUnitTest`) | Executed: **170 tests, 0 failures, 0 errors, 0 skipped** (33 new) |
-| Debug APK | Built, `hayati-debug.apk` 12,446,114 bytes (from `e6ffa83`, versionName 0.4.0; the bump to 0.5.0 came in a later commit, see the run on the branch head) |
+| Debug APK | Built, `hayati-debug.apk` 12,446,114 bytes (run 44377864036, versionName 0.4.0) |
+| Final build (run 44378839678, commit `b2d13bb`, conclusion success) | `hayati-debug.apk` 12,446,110 bytes, `aapt2`: versionCode 5, versionName 0.5.0; artifact `hayati-debug-apk` 11,879,717 bytes |
 
 | New class | Tests | Covers |
 |---|---|---|
