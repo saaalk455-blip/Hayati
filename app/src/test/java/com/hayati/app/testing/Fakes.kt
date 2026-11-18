@@ -235,3 +235,35 @@ class FakeLocationProvider(var result: com.hayati.app.data.prayer.location.Locat
         return result
     }
 }
+
+class FakeAdhkarContentSource(
+    var adhkar: List<com.hayati.app.domain.adhkar.model.Dhikr> = emptyList(),
+    var failure: Exception? = null,
+) : com.hayati.app.domain.adhkar.repository.AdhkarContentSource {
+    override suspend fun load(): List<com.hayati.app.domain.adhkar.model.Dhikr> {
+        failure?.let { throw it }
+        return adhkar
+    }
+}
+
+/** In-memory counters; set [failure] to make writes throw. */
+class FakeAdhkarProgressRepository : com.hayati.app.domain.adhkar.repository.AdhkarProgressRepository {
+    private val store = MutableStateFlow<Map<Triple<Long, String, String>, Int>>(emptyMap())
+    var failure: Exception? = null
+
+    override fun observeCounts(epochDay: Long, category: com.hayati.app.domain.adhkar.model.AdhkarCategory) =
+        store.map { all ->
+            all.filterKeys { it.first == epochDay && it.second == category.key }
+                .mapKeys { it.key.third }
+        }
+
+    override suspend fun setCount(
+        epochDay: Long,
+        category: com.hayati.app.domain.adhkar.model.AdhkarCategory,
+        dhikrId: String,
+        count: Int,
+    ) {
+        failure?.let { throw it }
+        store.update { it + (Triple(epochDay, category.key, dhikrId) to count) }
+    }
+}

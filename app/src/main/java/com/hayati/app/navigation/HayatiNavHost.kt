@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hayati.app.feature.adhkar.AdhkarScreen
 import com.hayati.app.feature.home.HomeScreen
 import com.hayati.app.feature.prayer.PrayerHistoryScreen
 import com.hayati.app.feature.prayer.PrayerScreen
@@ -67,8 +68,11 @@ fun HayatiNavHost(
         composable(HayatiRoutes.PRAYER_HISTORY) {
             PrayerHistoryScreen(onBack = { navController.popBackStack() })
         }
-        // Prayer is a real screen above; the other sections are still honest placeholders.
-        WorshipSection.entries.filter { it != WorshipSection.Prayer }.forEach { section ->
+        composable(WorshipSection.Adhkar.route) {
+            AdhkarScreen(onBack = { navController.popBackStack() })
+        }
+        // Prayer and Adhkar are real screens above; the other sections are still honest placeholders.
+        WorshipSection.entries.filter { it != WorshipSection.Prayer && it != WorshipSection.Adhkar }.forEach { section ->
             composable(section.route) {
                 WorshipSectionPlaceholderScreen(
                     section = section,

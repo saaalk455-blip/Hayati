@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.hayati.app.feature.adhkar.AdhkarViewModel
 import com.hayati.app.feature.home.HomeViewModel
 import com.hayati.app.feature.prayer.PrayerHistoryViewModel
 import com.hayati.app.feature.prayer.PrayerSettingsViewModel
@@ -37,6 +38,10 @@ object AppViewModelProvider {
                 scheduler = container.alarmScheduler,
                 permission = container.notificationPresenter,
             )
+        }
+        initializer {
+            val container = hayatiApplication().container
+            AdhkarViewModel(container.adhkarContentSource, container.adhkarProgressRepository, container.timeProvider)
         }
     }
 }

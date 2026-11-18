@@ -16,14 +16,14 @@ import org.robolectric.annotation.Config
 
 /**
  * Builds a genuine version-1 database file (the Phase 3 schema, with a task in it), then opens it
- * with the current database and the real migration, and checks the task survived and the new
- * prayer table works.
+ * with the current database and the real migrations (1->2->3), and checks the task survived and
+ * the new prayer and adhkar tables work.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 class DatabaseMigrationTest {
     @Test
-    fun `migrating from version 1 keeps tasks and adds prayer logs`() = runTest {
+    fun `migrating from version 1 keeps tasks and adds the prayer and adhkar tables`() = runTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val file = context.getDatabasePath("migration-test.db")
         file.parentFile?.mkdirs()
@@ -41,7 +41,7 @@ class DatabaseMigrationTest {
         }
 
         val database = Room.databaseBuilder(context, HayatiDatabase::class.java, "migration-test.db")
-            .addMigrations(HayatiDatabase.MIGRATION_1_2)
+            .addMigrations(HayatiDatabase.MIGRATION_1_2, HayatiDatabase.MIGRATION_2_3)
             .allowMainThreadQueries()
             .build()
         try {
@@ -50,6 +50,9 @@ class DatabaseMigrationTest {
 
             database.prayerLogDao().setStatus(100, Prayer.FAJR.name, true, 1L)
             assertEquals(1, database.prayerLogDao().observeDay(100).first().size)
+
+            database.adhkarProgressDao().setCount(100, "morning", "x", 1, 1L)
+            assertEquals(1, database.adhkarProgressDao().observe(100, "morning").first().size)
         } finally {
             database.close()
         }
