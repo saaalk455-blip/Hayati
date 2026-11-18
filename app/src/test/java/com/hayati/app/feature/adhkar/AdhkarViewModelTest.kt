@@ -43,6 +43,8 @@ class AdhkarViewModelTest {
     ): AdhkarViewModel {
         val viewModel = AdhkarViewModel(content, progress, time)
         backgroundScope.launch { viewModel.uiState.collect {} }
+        // backgroundScope uses the test scheduler; run it once so the collector subscribes.
+        testScheduler.runCurrent()
         return viewModel
     }
 
