@@ -89,3 +89,5 @@
 
 ### Added
 - `CLAUDE.md` protocol, `docs/` documentation set and `.gitignore` (SETUP-001, PR #1).
+
+- feat(adhkar): real content shipped in `assets/adhkar.json` — 52 entries (8 after prayer, 23 morning, 21 evening) from Hisn al-Muslim ch. 25 and 27, with printed takhrij. CI 192 tests, 0 skipped; JSON verified inside the APK.
