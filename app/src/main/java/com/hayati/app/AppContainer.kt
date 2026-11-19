@@ -9,6 +9,8 @@ import com.hayati.app.core.notifications.AlarmManagerPrayerScheduler
 import com.hayati.app.core.notifications.PrayerAutomation
 import com.hayati.app.core.notifications.PrayerNotificationCoordinator
 import com.hayati.app.core.notifications.PrayerNotificationPresenter
+import com.hayati.app.data.adhkar.content.AssetAdhkarContentSource
+import com.hayati.app.data.adhkar.repository.AdhkarProgressRepositoryImpl
 import com.hayati.app.data.local.HayatiDatabase
 import com.hayati.app.data.prayer.calculator.AdhanPrayerTimeCalculator
 import com.hayati.app.data.prayer.location.AndroidLocationProvider
@@ -16,6 +18,9 @@ import com.hayati.app.data.prayer.location.LocationProvider
 import com.hayati.app.data.prayer.repository.DataStorePrayerSettingsRepository
 import com.hayati.app.data.prayer.repository.PrayerLogRepositoryImpl
 import com.hayati.app.data.repository.TaskRepositoryImpl
+import com.hayati.app.domain.adhkar.repository.AdhkarContentSource
+import com.hayati.app.domain.adhkar.repository.AdhkarProgressRepository
+import com.hayati.app.domain.adhkar.usecase.AdhkarHomeProvider
 import com.hayati.app.domain.prayer.model.CalculationMethod
 import com.hayati.app.domain.prayer.repository.PrayerAlarmScheduler
 import com.hayati.app.domain.prayer.repository.PrayerLogRepository
@@ -44,7 +49,7 @@ class AppContainer(context: Context) {
 
     private val database: HayatiDatabase by lazy {
         Room.databaseBuilder(appContext, HayatiDatabase::class.java, HayatiDatabase.NAME)
-            .addMigrations(HayatiDatabase.MIGRATION_1_2)
+            .addMigrations(HayatiDatabase.MIGRATION_1_2, HayatiDatabase.MIGRATION_2_3)
             .build()
     }
 
@@ -65,6 +70,16 @@ class AppContainer(context: Context) {
 
     val prayerLogRepository: PrayerLogRepository by lazy {
         PrayerLogRepositoryImpl(dao = database.prayerLogDao(), time = timeProvider)
+    }
+
+    val adhkarContentSource: AdhkarContentSource by lazy { AssetAdhkarContentSource(appContext) }
+
+    val adhkarProgressRepository: AdhkarProgressRepository by lazy {
+        AdhkarProgressRepositoryImpl(dao = database.adhkarProgressDao(), time = timeProvider)
+    }
+
+    val adhkarHomeProvider: AdhkarHomeProvider by lazy {
+        AdhkarHomeProvider(adhkarContentSource, adhkarProgressRepository)
     }
 
     val prayerTimeCalculator: PrayerTimeCalculator by lazy { AdhanPrayerTimeCalculator() }

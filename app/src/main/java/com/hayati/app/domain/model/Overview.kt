@@ -6,7 +6,6 @@ package com.hayati.app.domain.model
  */
 enum class OverviewItem {
     QuranWird,
-    Adhkar,
     Tasks,
 }
 

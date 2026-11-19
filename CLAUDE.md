@@ -138,8 +138,9 @@ Reports must be factual. Never call a feature complete when only its UI exists. 
 Phase 2 (foundation, PR #2) was owner-tested and is awaiting merge. Phase 3 (tasks, PR #3,
 `feature/tasks-persistence`) awaits owner device testing and merge. Phase 4 (professional prayer
 system, version 0.4.0) is implemented on `feature/prayer-system`, stacked on Phase 3 with the
-owner's explicit approval ("موافق"); it passes CI (137 tests) but is **not device-tested**. Quran,
-adhkar, tasbeeh and statistics data are not implemented.
+owner's explicit approval ("موافق"); it passes CI (137 tests) but is **not device-tested**. Phase 5 (adhkar
+counter, 0.5.0, `feature/adhkar`, stacked on Phase 4) has the structure only: **no adhkar text is
+shipped** (KI-025). Quran, tasbeeh and statistics data are not implemented.
 **Do not start the next phase or implement features until a specification is approved.**
 See `docs/PROJECT_STATUS.md` for the actual state.
 

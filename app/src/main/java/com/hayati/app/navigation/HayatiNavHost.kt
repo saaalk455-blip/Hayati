@@ -7,7 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.hayati.app.domain.adhkar.model.AdhkarCategory
+import com.hayati.app.feature.adhkar.AdhkarScreen
 import com.hayati.app.feature.home.HomeScreen
 import com.hayati.app.feature.prayer.PrayerHistoryScreen
 import com.hayati.app.feature.prayer.PrayerScreen
@@ -41,6 +45,7 @@ fun HayatiNavHost(
                 onOpenSection = { navController.navigateSingleTop(it.route) },
                 onOpenTasks = { navController.navigateTopLevel(TopLevelDestination.Tasks) },
                 onOpenPrayer = { navController.navigateSingleTop(WorshipSection.Prayer.route) },
+                onOpenAdhkar = { category -> navController.navigateSingleTop(HayatiRoutes.adhkar(category?.key)) },
             )
         }
         composable(HayatiRoutes.WORSHIP) {
@@ -67,8 +72,22 @@ fun HayatiNavHost(
         composable(HayatiRoutes.PRAYER_HISTORY) {
             PrayerHistoryScreen(onBack = { navController.popBackStack() })
         }
-        // Prayer is a real screen above; the other sections are still honest placeholders.
-        WorshipSection.entries.filter { it != WorshipSection.Prayer }.forEach { section ->
+        composable(
+            route = HayatiRoutes.ADHKAR_PATTERN,
+            arguments = listOf(
+                navArgument(HayatiRoutes.ADHKAR_CATEGORY_ARG) {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                },
+            ),
+        ) { entry ->
+            val category = entry.arguments?.getString(HayatiRoutes.ADHKAR_CATEGORY_ARG)
+                ?.let { AdhkarCategory.fromKey(it) }
+            AdhkarScreen(onBack = { navController.popBackStack() }, initialCategory = category)
+        }
+        // Prayer and Adhkar are real screens above; the other sections are still honest placeholders.
+        WorshipSection.entries.filter { it != WorshipSection.Prayer && it != WorshipSection.Adhkar }.forEach { section ->
             composable(section.route) {
                 WorshipSectionPlaceholderScreen(
                     section = section,

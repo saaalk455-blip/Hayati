@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.5.0 — Phase 5: adhkar counter (unreleased, on `feature/adhkar`, stacked on `feature/prayer-system`)
+
+### Added
+- Adhkar screen (Worship → الأذكار): categories morning / evening / after prayer, one dhikr at a
+  time, tap counter (stops at the required repeat), undo, next/previous, per-category progress, a
+  per-day reset, accessibility description with the remaining count.
+- Room table `adhkar_progress` (database version 3, `MIGRATION_2_3`), strict JSON content loader.
+- 33 new tests (170 total): counter rules, parser, real Room DAO, v1→v2→v3 migration, ViewModel, Compose UI.
+
+### Added in the completion pass
+- Home adhkar card from the shared source; tap opens the right category (`section/adhkar?category=`).
+- `takhrij` field; `repeat` is now required; release rules (source, takhrij, no placeholders, no duplicates).
+- CI checks that `assets/adhkar.json` is inside the APK. `docs/ADHKAR_CONTENT.md`.
+
+### Important limitation
+- **No adhkar text is shipped.** `assets/adhkar.json` is empty on purpose; the screen says the
+  content is not available yet. Text must come from a reviewed, licensed source (see KI-025).
+  Test-only placeholder text exists only in test code.
+- Home "أذكار اليوم" is still "غير متاح بعد" (Home integration deferred, KI-026).
+
+### Changed
+- App version 0.4.0 → 0.5.0 (versionCode 5). Database 2 → 3.
+
 ## 0.4.0 — Phase 4: professional prayer system (unreleased, on `feature/prayer-system`, stacked on `feature/tasks-persistence`)
 
 ### Added
@@ -66,3 +89,5 @@
 
 ### Added
 - `CLAUDE.md` protocol, `docs/` documentation set and `.gitignore` (SETUP-001, PR #1).
+
+- feat(adhkar): real content shipped in `assets/adhkar.json` — 52 entries (8 after prayer, 23 morning, 21 evening) from Hisn al-Muslim ch. 25 and 27, with printed takhrij. CI 192 tests, 0 skipped; JSON verified inside the APK.

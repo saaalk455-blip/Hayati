@@ -1,4 +1,4 @@
-# Architecture (Phase 4)
+# Architecture (Phase 5)
 
 Single Gradle module `:app`, namespace / applicationId `com.hayati.app`. Clean-Architecture
 separation is done with packages, not with extra modules.
@@ -73,6 +73,20 @@ feature/prayer             PrayerScreen/ViewModel, PrayerHistoryScreen/ViewModel
   runs only a 12-hour maintenance reschedule. Details: `docs/PRAYER_SYSTEM.md`.
 - Database is version 2 (`prayer_logs` added by `MIGRATION_1_2`); see `docs/DATABASE_SCHEMA.md`.
 - Settings screen links to Prayer settings; routes `prayer/settings` and `prayer/history`.
+
+## Adhkar (Phase 5)
+
+```
+domain/adhkar/model        AdhkarCategory, Dhikr, DhikrProgress, CategoryProgress, AdhkarCounter
+domain/adhkar/repository   AdhkarContentSource, AdhkarProgressRepository
+data/adhkar                AdhkarJsonParser + AssetAdhkarContentSource (assets/adhkar.json),
+                           AdhkarProgressEntity/Dao, AdhkarProgressRepositoryImpl
+feature/adhkar             AdhkarViewModel (Loading|Error|Empty|Ready), AdhkarScreen / AdhkarContent
+```
+
+Content comes from an asset file, parsed strictly (any invalid entry rejects the whole file);
+counters live in Room per local day. The "current" dhikr is the first unfinished one unless the
+user navigates manually.
 
 ## SDK and dependency versions
 

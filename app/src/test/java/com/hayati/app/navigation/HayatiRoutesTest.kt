@@ -32,6 +32,14 @@ class HayatiRoutesTest {
     }
 
     @Test
+    fun adhkar_route_builder_matches_the_graph_pattern() {
+        assertEquals("section/adhkar", HayatiRoutes.adhkar())
+        assertEquals("section/adhkar?category=evening", HayatiRoutes.adhkar("evening"))
+        assertEquals(WorshipSection.Adhkar.route, HayatiRoutes.adhkar())
+        assertEquals("section/adhkar?category={category}", HayatiRoutes.ADHKAR_PATTERN)
+    }
+
+    @Test
     fun settings_is_not_a_bottom_bar_destination() {
         assertFalse(HayatiRoutes.SETTINGS in HayatiRoutes.topLevel)
     }

@@ -83,8 +83,22 @@ jobs:
           ls -l "$APK"
           AAPT2=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -n 1)
           "$AAPT2" dump badging "$APK" | grep -E "^(package|sdkVersion|targetSdkVersion|application-label:|launchable-activity)"
-          echo "--- permissions requested (expected: none) ---"
+          echo "--- permissions requested ---"
           "$AAPT2" dump permissions "$APK"
+          echo "--- adhkar content inside the APK ---"
+          unzip -l "$APK" | grep "assets/adhkar.json" || { echo "assets/adhkar.json is MISSING from the APK"; exit 1; }
+          unzip -p "$APK" assets/adhkar.json > /tmp/adhkar_in_apk.json
+          python3 - <<'PY'
+          import json
+          data = json.load(open("/tmp/adhkar_in_apk.json", encoding="utf-8"))
+          items = data["adhkar"]
+          counts = {}
+          for item in items:
+              counts[item["category"]] = counts.get(item["category"], 0) + 1
+          print("ADHKAR_IN_APK total =", len(items), "by category =", counts)
+          missing = [i["id"] for i in items if not i.get("source") or not i.get("takhrij")]
+          print("ADHKAR_IN_APK entries without source/takhrij =", missing)
+          PY
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4

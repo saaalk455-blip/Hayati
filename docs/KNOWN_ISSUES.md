@@ -20,6 +20,10 @@
 | KI-022 | Low | WorkManager adds WAKE_LOCK, ACCESS_NETWORK_STATE and FOREGROUND_SERVICE permissions to the merged manifest | Extra permission lines in the APK though the app has no internet or foreground service | Accepted |
 | KI-023 | Medium | Stacked PR chain (#2 <- #3 <- Phase 4) | Merge order matters; the Phase 4 PR must be retargeted to `main` after #3 merges | Open — owner action |
 | KI-024 | Low | Phase 4 artifact is named `hayati-debug.apk`, not the suggested `hayati-phase-4-prayer-debug.apk` | Cosmetic; version is visible in Settings and `aapt2` | Accepted |
+| KI-025 | Medium | Adhkar content shipped (52 entries: 8 after prayer, 23 morning, 21 evening) but not yet reviewed by a human scholar | Text/takhrij/counts transcribed from Hisn al-Muslim; flagged entries listed in `docs/ADHKAR_REVIEW.md` | Open — needs human religious review and written licence confirmation |
+| KI-026 | Medium | Home adhkar card | Implemented: real progress from the shared content/counters, tap opens the right category, daily reset by local date (unit-tested). With the empty content file it shows "غير متاح بعد" | Open — stays open until verified on a device with real content |
+| KI-027 | Medium | Phase 5 was never run on a device by Claude | Layout of long adhkar text, Home card tap and navigation, RTL are unverified | Open — needs owner device test (only meaningful with real content) |
+| KI-028 | Low | No adhkar reminders/notifications | Expected scope limit | Open — proposed as a separate part after the content is approved (see `docs/ADHKAR_CONTENT.md`); no placeholder reminders exist |
 | KI-006 | Low | `android-build.yml` uses `actions/setup-java@v4` and other actions that GitHub warns are on deprecated Node 20 | Warnings today; may need action upgrades later | Open |
 | KI-007 | Low | Custom icons are hand-written paths; owner reported Phase 2 works, but icon polish was not specifically reported | Possible visual differences from intent | Open — confirm with owner |
 | KI-008 | Low | UI is forced RTL/Arabic regardless of device language | Non-Arabic users see Arabic only | Accepted for now (D-008) |

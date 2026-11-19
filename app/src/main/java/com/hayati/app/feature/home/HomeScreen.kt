@@ -44,6 +44,8 @@ import com.hayati.app.core.designsystem.components.UnavailableBadge
 import com.hayati.app.core.designsystem.theme.HayatiPalette
 import com.hayati.app.core.designsystem.theme.HayatiSpacing
 import com.hayati.app.core.designsystem.theme.LocalHayatiColors
+import com.hayati.app.domain.adhkar.model.AdhkarCategory
+import com.hayati.app.domain.adhkar.usecase.AdhkarHomeState
 import com.hayati.app.domain.model.OverviewEntry
 import com.hayati.app.domain.model.OverviewItem
 import com.hayati.app.domain.model.OverviewValue
@@ -60,6 +62,7 @@ fun HomeScreen(
     onOpenSection: (WorshipSection) -> Unit,
     onOpenTasks: () -> Unit,
     onOpenPrayer: () -> Unit,
+    onOpenAdhkar: (AdhkarCategory?) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -77,6 +80,7 @@ fun HomeScreen(
         item(key = "header") { HomeHeader(onOpenSettings = onOpenSettings) }
         item(key = "welcome") { WelcomeCard() }
         item(key = "prayer") { PrayerHomeCard(snapshot = state.prayer, onClick = onOpenPrayer) }
+        item(key = "adhkar") { AdhkarHomeCard(state = state.adhkar, onOpen = onOpenAdhkar) }
         item(key = "today_title") { SectionTitle(stringResource(R.string.today_title)) }
         item(key = "overview") { OverviewCard(entries = state.overview) }
         item(key = "quick_title") { SectionTitle(stringResource(R.string.quick_actions_title)) }
@@ -236,6 +240,62 @@ private fun TasksProgressText(progress: OverviewValue.TasksProgress) {
 }
 
 @Composable
+private fun AdhkarHomeCard(state: AdhkarHomeState, onOpen: (AdhkarCategory?) -> Unit) {
+    val colors = LocalHayatiColors.current
+    val category = (state as? AdhkarHomeState.Ready)?.category
+    HayatiCard(modifier = Modifier.fillMaxWidth(), onClick = { onOpen(category) }) {
+        when (state) {
+            AdhkarHomeState.Loading -> Text(
+                text = stringResource(R.string.adhkar_loading),
+                style = MaterialTheme.typography.bodyMedium,
+                color = colors.textSecondary,
+            )
+            AdhkarHomeState.Unavailable -> Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.overview_adhkar),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                UnavailableBadge()
+            }
+            is AdhkarHomeState.Ready -> Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.home_adhkar_title,
+                        stringResource(state.category.homeLabelRes()),
+                    ),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = if (state.isComplete) {
+                        stringResource(R.string.adhkar_all_done)
+                    } else {
+                        stringResource(R.string.adhkar_progress_format, state.doneCount, state.total)
+                    },
+                    style = MaterialTheme.typography.titleSmall,
+                    color = if (state.isComplete) colors.success else colors.gold,
+                )
+            }
+        }
+    }
+}
+
+private fun AdhkarCategory.homeLabelRes(): Int = when (this) {
+    AdhkarCategory.MORNING -> R.string.adhkar_cat_morning
+    AdhkarCategory.EVENING -> R.string.adhkar_cat_evening
+    AdhkarCategory.AFTER_PRAYER -> R.string.adhkar_cat_after_prayer
+}
+
+@Composable
 private fun PrayerHomeCard(snapshot: PrayerSnapshot, onClick: () -> Unit) {
     val colors = LocalHayatiColors.current
     HayatiCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
@@ -296,7 +356,6 @@ private fun PrayerHomeCard(snapshot: PrayerSnapshot, onClick: () -> Unit) {
 @StringRes
 private fun OverviewItem.labelRes(): Int = when (this) {
     OverviewItem.QuranWird -> R.string.overview_quran_wird
-    OverviewItem.Adhkar -> R.string.overview_adhkar
     OverviewItem.Tasks -> R.string.overview_tasks
 }
 
