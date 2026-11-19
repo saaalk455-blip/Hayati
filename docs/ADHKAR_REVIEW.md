@@ -13,7 +13,20 @@ the repository and `assets/adhkar.json` is unchanged (empty).**
 - Table of contents (pp. 153-156): chapter 25 «الأذكار بعد السلام من الصلاة» starts on p. 46;
   chapter 26 on p. 52; chapter 27 «أذكار الصباح والمساء» starts on p. 54; chapter 28 on p. 68.
 
-## Licence (copyright page, p. 2)
+## Second source file (owner-attached PDF, 2026-11-19)
+
+- Same book, **5th edition, 1421 AH**, "طبع ونشر وزارة الشؤون الإسلامية والأوقاف والدعوة والإرشاد"
+  (Saudi Ministry of Islamic Affairs, with the Cooperative Office for Call and Guidance), 96 PDF
+  pages (pocket format). Also **image-only, no text layer**.
+- Table of contents (p. 93): chapter 25 starts on p. 28, chapter 26 on p. 31, chapter 27 on p. 32,
+  chapter 28 on p. 41. Printed page numbers equal PDF page numbers.
+- Copyright page (p. 2): «© سعيد بن علي بن وهف القحطاني، 1421هـ»; **no free-distribution clause
+  appears on it**, and the last pages (94-96) are the table of contents only. This edition therefore
+  gives no permission that settles the question.
+- Use: a second, independent edition for cross-checking wording and takhrij against the 34th
+  edition. Differences between the editions must be recorded for review, not resolved by guessing.
+
+## Licence (34th edition, copyright page, p. 2)
 
 The page states «حقوق الطبع محفوظة إلا لمن أراد طبعه، وتوزيعه مجانًا، بدون حذف، أو إضافة أو تغيير..
 بشرط أن يكتب على الغلاف الخارجي «وقف لله تعالى»» (rights reserved, except for whoever wants to print
